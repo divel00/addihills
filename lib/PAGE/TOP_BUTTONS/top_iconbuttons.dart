@@ -179,13 +179,13 @@ static const TextStyle menuTextStyle = TextStyle(
                             },
                           ),
                           ListTile(
-                            title: const Text('Court Reservation',style: menuTextStyle),
+                            title: const Text('Venue Reservation',style: menuTextStyle),
                             onTap: () {
 
                             },
                           ),
                           ListTile(
-                            title: const Text('Borrow Chains & Tents',style: menuTextStyle),
+                            title: const Text('Equipments',style: menuTextStyle),
                             onTap: () {
                             },
                           ),

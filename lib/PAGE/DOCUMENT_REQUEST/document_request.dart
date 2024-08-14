@@ -1,10 +1,17 @@
+import 'package:addhills_app/MODELS/docs.dart';
+import 'package:addhills_app/SERVICES/db_service.dart';
 import 'package:flutter/material.dart';
 import 'package:addhills_app/PAGE/DOCUMENT_REQUEST/doc_req_press.dart';
 import 'package:addhills_app/PAGE/TOP_BUTTONS/top_iconbuttons.dart';
 
-class DocuPage extends StatelessWidget {
+class DocuPage extends StatefulWidget {
+  @override
+  State<DocuPage> createState() => _DocuPageState();
+}
+
+class _DocuPageState extends State<DocuPage> {
   //const DocuPage({super.key});
-  var height,width;
+  static var height,width;
 
   @override
   Widget build(BuildContext context) {
@@ -62,39 +69,7 @@ class DocuPage extends StatelessWidget {
                             endIndent: 50,
                             color: Colors.black54
                           ),
-                          Container(
-                            height: (height * .67), width: width,
-                            padding: EdgeInsets.only(left: 50, right: 50),
-                            child: ListView.builder(
-                              itemCount: 5,
-                              itemBuilder: (context, index) {
-                                return ListTile(
-                                  title: Container(
-                                    height: 135,
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text('Document Request', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black)),
-                                        Text('Lorem ipsum dolor sit amet, consectetur '
-                                        'adipiscing elit, sed do eiusmod tempor incididunt ut labore' 
-                                        'et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud'
-                                        'exercitation ullamco laboris nisi ut aliquip' 
-                                        'ex ea commodo consequat. ', style: TextStyle(fontSize: 15), maxLines: 3,overflow: TextOverflow.ellipsis,),
-                                        Text('see more...', style: TextStyle(fontSize: 13)),
-                                        Divider(
-                                          color: Colors.black54
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  onTap: () {
-                                    Navigator.push(
-                                    context, MaterialPageRoute(builder: (BuildContext context) => DocReqPress()));
-                                  },
-                                );
-                              },
-                            ),
-                          )
+                          ListOfDoc()
                         ],
                       ),
                     ),
@@ -102,6 +77,61 @@ class DocuPage extends StatelessWidget {
                 ),
               ],
             ),
+          );
+        }
+      ),
+    );
+  }
+}
+
+class ListOfDoc extends StatelessWidget {
+  // const ListOfDoc({
+  //   super.key,
+  //   required this.height,
+  //   required this.width,
+  // });
+
+  var height = _DocuPageState.height;
+  var width = _DocuPageState.width;
+
+  final DbService _dbService = DbService();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: (height * .67), width: width,
+      padding: EdgeInsets.only(left: 50, right: 50),
+      child: StreamBuilder(
+        stream: _dbService.getDocs(),
+        builder: (context, snapshot) {
+          List docs = snapshot.data?.docs?? [];
+          return ListView.builder(
+            padding: EdgeInsets.zero,
+            itemCount: docs.length,
+            itemBuilder: (context, index) {
+              Docs docu = docs[index].data();
+              return ListTile(
+                title: Container(
+                  //padding: EdgeInsets.only(top: 50),
+                  //alignment: Alignment.topCenter,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('${docu.title}', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black)),
+                      Text('${docu.description}', style: TextStyle(fontSize: 15), maxLines: 3,overflow: TextOverflow.ellipsis,),
+                      Text('see more...', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                      Divider(
+                        color: Colors.black54
+                      ),
+                    ],
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                  context, MaterialPageRoute(builder: (BuildContext context) => DocReqPress(title: '${docu.title}', description: '${docu.description}',)));
+                },
+              );
+            },
           );
         }
       ),

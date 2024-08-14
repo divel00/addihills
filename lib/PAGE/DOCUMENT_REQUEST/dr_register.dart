@@ -104,7 +104,9 @@ class DrForm extends StatelessWidget {
         headerForTfield(text: 'Address',),
         buildAddress(),    
         headerForTfield(text: 'Birthday',),
-        buildBirthday(),              
+        buildBirthday(),   
+        headerForTfield(text: 'Purpose',),
+        buildPurpose(),           
       ],
     );
   }
@@ -145,6 +147,17 @@ class DrForm extends StatelessWidget {
     keyboardType: TextInputType.datetime,
   );
 
+   Widget buildPurpose() => TextField(
+    style: TextStyle(fontSize: 15),
+    decoration: InputDecoration(
+      hintText: 'test',
+      border: OutlineInputBorder(),
+      isDense: true,
+      contentPadding: EdgeInsets.all(8),
+    ),
+    textInputAction: TextInputAction.done,
+    //keyboardType: TextInputType.,
+  );
 
 }
 

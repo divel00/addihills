@@ -1,9 +1,17 @@
+import 'package:addhills_app/PAGE/DOCUMENT_REQUEST/dr_register.dart';
 import 'package:flutter/material.dart';
-import 'package:addhills_app/PAGE/DOCUMENT_REQUEST/doc_req_content.dart';
+// import 'package:addhills_app/PAGE/DOCUMENT_REQUEST/doc_req_content.dart';
 import 'package:addhills_app/PAGE/TOP_BUTTONS/top_navigationpop.dart';
 
 class DocReqPress extends StatelessWidget {
   var height,width;
+  String title,description;
+
+
+  DocReqPress({
+    required this.title,
+    required this.description,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +74,7 @@ class DocReqPress extends StatelessWidget {
                             child: ListView(
                               padding: EdgeInsets.zero,
                               children: [
-                                DocReqContent(),
+                                DocReqContent(title: title, description: description,),
                               ],
                             ),
                           ),
@@ -80,6 +88,54 @@ class DocReqPress extends StatelessWidget {
             ),
           );
         }
+      ),
+    );
+  }
+}
+
+class DocReqContent extends StatelessWidget {
+  String title,description;
+
+  DocReqContent({
+    required this.title,
+    required this.description,
+  });
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          alignment: Alignment.topCenter,
+          child: Text('$title', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black))),
+        Container(
+          padding: EdgeInsets.only(top: 10,),
+          alignment: Alignment.topLeft,
+          child: Text( 'Description: \n $description \n\nRequirements: ', style: TextStyle(fontSize: 15), textAlign: TextAlign.justify,),
+        ),            
+      ],
+    );
+  }
+}
+
+class DocReqButton extends StatelessWidget {
+  //const DocReqButton({super.key,});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.bottomCenter,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color.fromARGB(255, 243, 109, 99),
+          padding: EdgeInsets.only(left: 80, right: 80, top: 10, bottom: 10,),
+        ),
+        onPressed: (){
+          Navigator.push(
+            context, MaterialPageRoute(builder: (BuildContext context) => DrRegister()));
+        },
+        child: Text('Request', style: TextStyle(fontSize: 15, color: Colors.white),),
       ),
     );
   }

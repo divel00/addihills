@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "769077879759",
+    "firebase_url": "https://sampleproject1-2cb77-default-rtdb.firebaseio.com",
+    "project_id": "sampleproject1-2cb77",
+    "storage_bucket": "sampleproject1-2cb77.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:769077879759:android:a6be2376e76f90eb7628ba",
+        "android_client_info": {
+          "package_name": "com.example.addhills_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfqopCLJUj9dFKZeW-RA6psv-lB1k-2AU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:769077879759:android:90425c5dbe11cb657628ba",
+        "android_client_info": {
+          "package_name": "com.example.barangay"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfqopCLJUj9dFKZeW-RA6psv-lB1k-2AU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
