@@ -6,7 +6,9 @@ class DocuRequest{
   String address;
   String birthday;
   String request_status;
+  String user_email;
   Timestamp date_requested;
+  Timestamp pickup_date;
   
   DocuRequest({
     required this.document_title,
@@ -14,8 +16,9 @@ class DocuRequest{
     required this.address,
     required this.birthday,
     required this.request_status,
+    required this.user_email,
     required this.date_requested,
-
+    required this.pickup_date
   });
 
   DocuRequest.fromJson(Map<String, Object?> json) :
@@ -25,7 +28,9 @@ class DocuRequest{
     address: json['address']! as String,
     birthday: json['birthday']! as String,
     request_status: json['request_status']! as String,
+    user_email: json['user_email']! as String,
     date_requested: json['date_requested']! as Timestamp,
+    pickup_date: json['pickup_date']! as Timestamp,
   );
 
   DocuRequest copyWith({
@@ -34,7 +39,9 @@ class DocuRequest{
     String? address,
     String? birthday,
     String? request_status,
+    String? user_email,
     Timestamp? date_requested,
+    Timestamp? pickup_date,
   }) {
     return DocuRequest(
       document_title: document_title ?? this.document_title,
@@ -42,7 +49,9 @@ class DocuRequest{
       address: address ?? this.address, 
       birthday: birthday ?? this.birthday, 
       request_status: request_status ?? this.request_status, 
+      user_email: user_email ?? this.user_email,
       date_requested: date_requested ?? this.date_requested, 
+      pickup_date: pickup_date ?? this.pickup_date,
     );
   }
 
@@ -53,7 +62,9 @@ class DocuRequest{
       'address': address,
       'birthday': birthday,
       'request_status': request_status,
+      'user_email': user_email, 
       'date_requested': date_requested,
+      'pickup_date': pickup_date,
     };
   }
 }

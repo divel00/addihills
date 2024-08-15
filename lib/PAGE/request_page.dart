@@ -4,6 +4,7 @@
 
 import 'package:addhills_app/MODELS/docu_request.dart';
 import 'package:addhills_app/SERVICES/db_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -122,6 +123,7 @@ class listOfReq extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
+                  _showDialog(context,docu.document_title,docu.date_requested,docu.request_status,docu.pickup_date);
                   // Navigator.push(
                   // context, MaterialPageRoute(builder: (BuildContext context) => DocReqPress(title: '${docu.title}', description: '${docu.description}',)));
                 },
@@ -132,6 +134,56 @@ class listOfReq extends StatelessWidget {
       ),
     );
   }
+
+  Future<dynamic> _showDialog(BuildContext context, String title, Timestamp date, String status, Timestamp pickup_date) {
+  String? temp;
+
+  if (status == 'Approved'){
+    temp = DateFormat('yyyy-MM-dd').format(pickup_date.toDate());
+  }
+  else{
+    temp = '';
+  }
+  return showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        contentPadding: EdgeInsets.all(16.0), // Adjust padding as needed
+        content: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: 300), // Adjust width as needed
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              SizedBox(height: 8.0), // Add spacing between widgets
+              //Text('Created on: ',style: TextStyle(fontSize: 15),),
+              Text('Created on: ${DateFormat('yyyy-MM-dd h:mm a').format(date.toDate())}',
+                style: TextStyle(fontSize: 15),
+              ),
+              SizedBox(height: 8.0), // Add spacing between widgets
+              Text(
+                'Status: $status',
+                style: TextStyle(fontSize: 15),
+                //textAlign: TextAlign.justify,
+              ),
+              SizedBox(height: 8.0), // Add spacing between widgets
+              Text(
+                'Pickup Date: $temp', style: TextStyle(fontSize: 15),),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
 }
 
 

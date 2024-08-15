@@ -213,10 +213,18 @@ class DrSubmit extends StatelessWidget {
     required this.controller3,
   });
 
-    final DbService _dbService = DbService();
+  final DbService _dbService = DbService();
 
   @override
   Widget build(BuildContext context) {
+    Timestamp now = Timestamp.now();
+    // Convert Timestamp to DateTime
+    DateTime nowDateTime = now.toDate();
+    // Add 6 days to the current DateTime
+    DateTime futureDateTime = nowDateTime.add(Duration(days: 6));
+    // Convert the future DateTime back to Firestore Timestamp
+    Timestamp futureTimestamp = Timestamp.fromDate(futureDateTime);
+
     return Container(
       alignment: Alignment.bottomCenter,
       child: ElevatedButton(
@@ -231,7 +239,9 @@ class DrSubmit extends StatelessWidget {
             address: controller2.text, 
             birthday: controller3.text, 
             request_status: "pending", 
+            user_email: 'kungfupanda@email.com',
             date_requested: Timestamp.now(),
+            pickup_date: futureTimestamp,
           );
           _dbService.addDocsReq(docsreq);
           
@@ -249,12 +259,12 @@ class DrSubmit extends StatelessWidget {
 
   Future<dynamic> _showDialog(BuildContext context) {
     return showDialog(
-          context: context, 
-          builder: (context){
-            return AlertDialog(
-              title: Text('Request Submitted!'),
-            );
-          },
+      context: context, 
+      builder: (context){
+        return AlertDialog(
+          title: Text('Request Submitted!'),
         );
+      },
+    );
   }
 }
