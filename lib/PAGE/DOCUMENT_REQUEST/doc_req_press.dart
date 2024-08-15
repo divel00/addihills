@@ -78,7 +78,7 @@ class DocReqPress extends StatelessWidget {
                               ],
                             ),
                           ),
-                          DocReqButton(),
+                          DocReqButton(title: title,),
                         ],
                       ),
                     ),
@@ -121,6 +121,11 @@ class DocReqContent extends StatelessWidget {
 
 class DocReqButton extends StatelessWidget {
   //const DocReqButton({super.key,});
+  String title;
+
+  DocReqButton({
+    required this.title,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +138,7 @@ class DocReqButton extends StatelessWidget {
         ),
         onPressed: (){
           Navigator.push(
-            context, MaterialPageRoute(builder: (BuildContext context) => DrRegister()));
+            context, MaterialPageRoute(builder: (BuildContext context) => DrRegister(title: title,)));
         },
         child: Text('Request', style: TextStyle(fontSize: 15, color: Colors.white),),
       ),
