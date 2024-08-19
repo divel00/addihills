@@ -1,10 +1,17 @@
+import 'package:addhills_app/PAGE/signup_page.dart';
+import 'package:addhills_app/SERVICES/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+  // const LoginPage({super.key});
 
   void onPressed() => {};
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +24,7 @@ class LoginPage extends StatelessWidget {
             Container(
               margin: const EdgeInsets.only(top: 80),
               child: Text(
-                'Logo Name',
+                'RequEase',
                 style: /*GoogleFonts.poppins(*/
                     /*textStyle: const */TextStyle(
                         fontSize: 32,
@@ -52,6 +59,7 @@ class LoginPage extends StatelessWidget {
                         color: Color(0xFF0A0A0A),
                       ),
                     )),
+                controller: _emailController,
               ),
             ),
             Padding(
@@ -68,6 +76,7 @@ class LoginPage extends StatelessWidget {
                         color: Color(0xFF0A0A0A),
                       ),
                     )),
+                controller: _passwordController,
               ),
             ),
             Container(
@@ -84,7 +93,13 @@ class LoginPage extends StatelessWidget {
                         backgroundColor: const Color(0xff0a0a0a),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(4))),
-                    onPressed: onPressed,
+                    onPressed: () async {
+                      await AuthService(FirebaseAuth.instance).signin(
+                        email: _emailController.text,
+                        password: _passwordController.text,
+                        context: context
+                      );
+                    },
                     child: const Text(
                       'Log in',
                       style: TextStyle(color: Color(0xffFAFAFA)),
@@ -110,7 +125,8 @@ class LoginPage extends StatelessWidget {
                     ),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        Navigator.pushNamed(context, '/signupPage');
+                        Navigator.pushReplacement(
+                        context, MaterialPageRoute(builder: (BuildContext context) => SignupPage()));
                       }),
               ],
             ))
