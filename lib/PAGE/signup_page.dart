@@ -37,13 +37,13 @@ class _SignupPageState extends State<SignupPage> {
   }
   
   void signUpUser() async {
-      await AuthService(FirebaseAuth.instance).signUp(
-      // lastName: _lastNameController.text, 
-      // firstName: _firstNameController.text,
+      await AuthService().signUp(
+      lastName: _lastNameController.text, 
+      firstName: _firstNameController.text,
       email: _emailController.text, 
-      // phoneNumber: _phoneController.text, 
-      // address: _addressController.text, 
-      // birthday: _birthdayController.text, 
+      phoneNumber: _phoneController.text, 
+      address: _addressController.text, 
+      birthday: _birthdayController.text, 
       password: _passwordController.text, 
       context: context);
   }
@@ -155,28 +155,28 @@ class _SignupPageState extends State<SignupPage> {
                     key: _formKey,
                     child: Column(
                       children: [
-                        // WithoutIconTextfield(
-                        //   hintText: 'Last Name',
-                        //   labelText: 'Last Name',
-                        //   controller: _lastNameController,
-                        //   validator: (val) {
-                        //     if (val != null && val.isValidLastName) {
-                        //       return "Enter a valid last name";
-                        //     }
-                        //     return null;
-                        //   },
-                        // ),
-                        // WithoutIconTextfield(
-                        //   hintText: 'First Name',
-                        //   labelText: 'First Name',
-                        //   controller: _firstNameController,
-                        //   validator: (val) {
-                        //     if (val!.isEmpty && val.isValidName) {
-                        //       return "Enter a valid first name";
-                        //     }
-                        //     return null;
-                        //   },
-                        // ),
+                        WithoutIconTextfield(
+                          hintText: 'Last Name',
+                          labelText: 'Last Name',
+                          controller: _lastNameController,
+                          validator: (val) {
+                            if (val != null && val.isValidLastName) {
+                              return "Enter a valid last name";
+                            }
+                            return null;
+                          },
+                        ),
+                        WithoutIconTextfield(
+                          hintText: 'First Name',
+                          labelText: 'First Name',
+                          controller: _firstNameController,
+                          validator: (val) {
+                            if (val!.isEmpty && val.isValidName) {
+                              return "Enter a valid first name";
+                            }
+                            return null;
+                          },
+                        ),
                         WithoutIconTextfield(
                           hintText: 'Email',
                           labelText: 'Email',
@@ -188,46 +188,46 @@ class _SignupPageState extends State<SignupPage> {
                             return null;
                           },
                         ),
-                        // WithoutIconTextfield(
-                        //   hintText: 'Phone Number',
-                        //   labelText: 'Phone Number',
-                        //   controller: _phoneController,
-                        //   validator: (val) {
-                        //     if (val != null && !val.isValidPhone) {
-                        //       return "Enter a valid phone number";
-                        //     }
-                        //     return null;
-                        //   },
-                        // ),
-                        // WithoutIconTextfield(
-                        //   hintText: 'Barangay/City/Province',
-                        //   labelText: 'Address',
-                        //   controller: _addressController,
-                        // ),
-                        // Container(
-                        //   margin: const EdgeInsets.symmetric(vertical: 4),
-                        //   child: TextFormField(
-                        //     controller: _birthdayController,
-                        //     readOnly: true,
-                        //     decoration: InputDecoration(
-                        //         hintText: 'Birthday',
-                        //         labelText: 'Birthday',
-                        //         focusedBorder: const OutlineInputBorder(
-                        //             borderSide: BorderSide(
-                        //                 color: Color(0xff0a0a0a), width: 1.5)),
-                        //         border: const OutlineInputBorder(),
-                        //         contentPadding: const EdgeInsets.symmetric(
-                        //             horizontal: 4, vertical: 10),
-                        //         enabledBorder: const OutlineInputBorder(
-                        //             borderSide: BorderSide(
-                        //                 color: Color(0xff0a0a0a), width: 1)),
-                        //         suffixIcon: InkWell(
-                        //           onTap: _showDatePicker,
-                        //           child:
-                        //               const Icon(Icons.calendar_month_rounded),
-                        //         )),
-                        //   ),
-                        // ),
+                        WithoutIconTextfield(
+                          hintText: 'Phone Number',
+                          labelText: 'Phone Number',
+                          controller: _phoneController,
+                          validator: (val) {
+                            if (val != null && !val.isValidPhone) {
+                              return "Enter a valid phone number";
+                            }
+                            return null;
+                          },
+                        ),
+                        WithoutIconTextfield(
+                          hintText: 'Barangay/City/Province',
+                          labelText: 'Address',
+                          controller: _addressController,
+                        ),
+                        Container(
+                          margin: const EdgeInsets.symmetric(vertical: 4),
+                          child: TextFormField(
+                            controller: _birthdayController,
+                            readOnly: true,
+                            decoration: InputDecoration(
+                                hintText: 'Birthday',
+                                labelText: 'Birthday',
+                                focusedBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Color(0xff0a0a0a), width: 1.5)),
+                                border: const OutlineInputBorder(),
+                                contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 4, vertical: 10),
+                                enabledBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Color(0xff0a0a0a), width: 1)),
+                                suffixIcon: InkWell(
+                                  onTap: _showDatePicker,
+                                  child:
+                                      const Icon(Icons.calendar_month_rounded),
+                                )),
+                          ),
+                        ),
                         PasswordTextfield(
                           controller: _passwordController,
                         ),
@@ -270,18 +270,7 @@ class _SignupPageState extends State<SignupPage> {
                         ),
                         InkWell(
                           onTap: () async {
-                            await AuthService(FirebaseAuth.instance).signUp(
-                            // lastName: _lastNameController.text, 
-                            // firstName: _firstNameController.text,
-                            email: _emailController.text, 
-                            // phoneNumber: _phoneController.text, 
-                            // address: _addressController.text, 
-                            // birthday: _birthdayController.text, 
-                            password: _passwordController.text, 
-                            context: context);
-                            
-                            
-                            //signUpUser();
+                            signUpUser();
                             // debugPrint(_birthdayController.text);
                             //_formKey.currentState!.validate();
                             // Make sure _fname is not null
@@ -403,6 +392,7 @@ class _PasswordTextfieldState extends State<PasswordTextfield> {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4),
       child: TextFormField(
+        controller: widget.controller,
         decoration: InputDecoration(
           hintText: 'Password',
           labelText: 'Password',

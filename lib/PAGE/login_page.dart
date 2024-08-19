@@ -94,7 +94,7 @@ class LoginPage extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(4))),
                     onPressed: () async {
-                      await AuthService(FirebaseAuth.instance).signin(
+                      await AuthService().signin(
                         email: _emailController.text,
                         password: _passwordController.text,
                         context: context
