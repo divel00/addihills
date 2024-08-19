@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:addhills_app/PAGE/DOCUMENT_REQUEST/document_request.dart';
+import 'package:addhills_app/PAGE/OTHER_SERVICES/burial_space_registration_page.dart';
+import 'package:addhills_app/PAGE/OTHER_SERVICES/venue_reservation_page.dart';
+import 'package:addhills_app/PAGE/OTHER_SERVICES/equipments_page.dart';
 import 'package:addhills_app/PAGE/home.dart';
 import 'package:addhills_app/PAGE/my_profile.dart';
 import 'package:addhills_app/PAGE/request_page.dart';
@@ -175,18 +178,22 @@ static const TextStyle menuTextStyle = TextStyle(
                           ListTile(
                             title: const Text('Burial Space Registration',style: menuTextStyle),
                             onTap: () {
-
+                              Navigator.push(
+                                context, MaterialPageRoute(builder: (BuildContext context) => BurialSpaceRegistrationPage()));
                             },
                           ),
                           ListTile(
                             title: const Text('Venue Reservation',style: menuTextStyle),
                             onTap: () {
-
+                              Navigator.push(
+                                context, MaterialPageRoute(builder: (BuildContext context) => VenueReservationPage()));
                             },
                           ),
                           ListTile(
                             title: const Text('Equipments',style: menuTextStyle),
                             onTap: () {
+                              Navigator.push(
+                                context, MaterialPageRoute(builder: (BuildContext context) => EquipmentsPage()));
                             },
                           ),
                         ],
