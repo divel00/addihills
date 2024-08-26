@@ -1,5 +1,8 @@
+import 'package:addhills_app/utils/show_snackbar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:addhills_app/PAGE/request_page.dart';
+import 'package:provider/provider.dart';
 
 
 class ProfileIcon extends StatelessWidget {
@@ -172,6 +175,20 @@ class ProfileList extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                 context, MaterialPageRoute(builder: (BuildContext context) => RequestPage()));
+              },
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.logout,
+                color: Colors.black),
+              title: const Text('Sign Out', style: ProfileIcon.genTextStyle),
+              onTap: () async {
+                try {
+                  await FirebaseAuth.instance.signOut();
+                } on FirebaseAuthException catch (e) {
+                  showSnackBar(context, e.message!); // Displaying the error message
+                }
+  
               },
             ),
           ],

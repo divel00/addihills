@@ -1,25 +1,23 @@
-import 'package:addhills_app/MODELS/docs.dart';
+import 'package:addhills_app/MODELS/equips.dart';
+import 'package:addhills_app/PAGE/OTHER_SERVICES/EQUIPMENTS_PAGE/equips_content.dart';
 import 'package:addhills_app/SERVICES/db_service.dart';
 import 'package:flutter/material.dart';
-import 'package:addhills_app/PAGE/DOCUMENT_REQUEST/doc_req_press.dart';
-import 'package:addhills_app/PAGE/TOP_BUTTONS/top_iconbuttons.dart';
+import 'package:addhills_app/PAGE/TOP_BUTTONS/top_navigationpop.dart';
 
-class DocuPage extends StatefulWidget {
+class EquipmentsPage extends StatefulWidget{
   @override
-  State<DocuPage> createState() => _DocuPageState();
+  State<EquipmentsPage> createState() => _EquipmentsPageState();
 }
 
-class _DocuPageState extends State<DocuPage> {
-  //const DocuPage({super.key});
+class _EquipmentsPageState extends State<EquipmentsPage> {
   static var height,width;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      drawer: const Menu(),
       body: Builder(
         builder: (context) {
           return Container(
@@ -30,10 +28,10 @@ class _DocuPageState extends State<DocuPage> {
                   decoration: BoxDecoration(
                     color: Colors.black,
                   ),
-                  height: height * 0.2,
+                  height: height * 0.15,
                   width: width,
                   alignment: Alignment.topCenter,
-                  child: MenuNotifProfile()
+                  child: TopNavigationpop(color: Colors.white,),
                 ),
                 Stack(
                   children: [
@@ -45,7 +43,7 @@ class _DocuPageState extends State<DocuPage> {
                           topRight: Radius.circular(50),
                         )
                       ),
-                      height: height - (height * 0.2),
+                      height: height - (height * 0.15),
                       width: width,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -56,7 +54,7 @@ class _DocuPageState extends State<DocuPage> {
                               bottom: 15,
                             ),
                             child: Text(
-                              'Document Request',
+                              'Equipments',
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 25,
@@ -69,7 +67,7 @@ class _DocuPageState extends State<DocuPage> {
                             endIndent: 50,
                             color: Colors.black54
                           ),
-                          ListOfDoc()
+                          ListOfEquips(),
                         ],
                       ),
                     ),
@@ -84,15 +82,18 @@ class _DocuPageState extends State<DocuPage> {
   }
 }
 
-class ListOfDoc extends StatelessWidget {
+
+
+
+class ListOfEquips extends StatelessWidget {
   // const ListOfDoc({
   //   super.key,
   //   required this.height,
   //   required this.width,
   // });
 
-  var height = _DocuPageState.height;
-  var width = _DocuPageState.width;
+  var height = _EquipmentsPageState.height;
+  var width = _EquipmentsPageState.width;
 
   final DbService _dbService = DbService();
 
@@ -102,14 +103,14 @@ class ListOfDoc extends StatelessWidget {
       height: (height * .67), width: width,
       padding: EdgeInsets.only(left: 50, right: 50),
       child: StreamBuilder(
-        stream: _dbService.getDocs(),
+        stream: _dbService.getEquips(),
         builder: (context, snapshot) {
           List docs = snapshot.data?.docs?? [];
           return ListView.builder(
             padding: EdgeInsets.zero,
             itemCount: docs.length,
             itemBuilder: (context, index) {
-              Docs docu = docs[index].data();
+              Equips docu = docs[index].data();
               return ListTile(
                 title: Container(
                   //padding: EdgeInsets.only(top: 50),
@@ -117,8 +118,8 @@ class ListOfDoc extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('${docu.title}', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black)),
-                      Text('${docu.description}', style: TextStyle(fontSize: 15), maxLines: 3,overflow: TextOverflow.ellipsis,),
+                      Text('${docu.itemName}', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black)),
+                      Text('${docu.itemDescription}', style: TextStyle(fontSize: 15), maxLines: 3,overflow: TextOverflow.ellipsis,),
                       Text('see more...', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                       Divider(
                         color: Colors.black54
@@ -128,14 +129,15 @@ class ListOfDoc extends StatelessWidget {
                 ),
                 onTap: () {
                   Navigator.push(
-                  context, MaterialPageRoute(builder: (BuildContext context) => DocReqPress(
-                    title: '${docu.title}', 
-                    description: '${docu.description}',
-                    lastMod: '${docu.lastModificationOn}',
+                  context, MaterialPageRoute(builder: (BuildContext context) => EquipsContent(
+                    name: '${docu.itemName}', 
+                    description: '${docu.itemDescription}',
+                    lastMod: '${docu.lastUpdatedOn}',
                     CreatedOn: '${docu.createdOn}',
-                    requirement: '- ${docu.docRequirements.join('\n- ')}',
-                    price: '${docu.price}',
-                    
+                    requirement: '- ${docu.itemRequirements.join('\n- ')}',
+                    price: docu.pricingTable,
+                    rules: '- ${docu.rules.join('\n- ')}',
+                    quantity: docu.itemQuantity,
                   )));
                 },
               );

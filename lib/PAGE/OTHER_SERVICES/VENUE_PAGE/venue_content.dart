@@ -1,20 +1,23 @@
 import 'package:addhills_app/PAGE/DOCUMENT_REQUEST/dr_register.dart';
+import 'package:addhills_app/PAGE/OTHER_SERVICES/VENUE_PAGE/venue_request.dart';
 import 'package:flutter/material.dart';
 // import 'package:addhills_app/PAGE/DOCUMENT_REQUEST/doc_req_content.dart';
 import 'package:addhills_app/PAGE/TOP_BUTTONS/top_navigationpop.dart';
 
-class DocReqPress extends StatelessWidget {
+class VenueContent extends StatelessWidget {
   var height,width;
-  String title,description,lastMod,CreatedOn,price,requirement;
+  String name,description,lastMod,CreatedOn,price,requirement,address,available;
 
 
-  DocReqPress({
-    required this.title,
+  VenueContent({
+    required this.name,
     required this.description,
+    required this.address,
     required this.lastMod,
     required this.CreatedOn,
     required this.price,
     required this.requirement,
+    required this.available,
   });
 
   @override
@@ -59,7 +62,7 @@ class DocReqPress extends StatelessWidget {
                               bottom: 15,
                             ),
                             child: Text(
-                              'Document Request',
+                              'Equipments',
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 25,
@@ -78,18 +81,20 @@ class DocReqPress extends StatelessWidget {
                             child: ListView(
                               padding: EdgeInsets.zero,
                               children: [
-                                DocReqContent(
-                                  title: title, 
+                                VenueReqContent(
+                                  name: name, 
                                   description: description, 
                                   lastMod: lastMod, 
                                   CreatedOn: CreatedOn, 
                                   price: price, 
                                   requirement: requirement,
+                                  available: available,
+                                  address: address,
                                 ),
                               ],
                             ),
                           ),
-                          DocReqButton(title: title,),
+                          VenueReqButton(title: name,),
                         ],
                       ),
                     ),
@@ -104,16 +109,18 @@ class DocReqPress extends StatelessWidget {
   }
 }
 
-class DocReqContent extends StatelessWidget {
-  String title,description,lastMod,CreatedOn,price,requirement;
+class VenueReqContent extends StatelessWidget {
+  String name,description,lastMod,CreatedOn,price,address,available,requirement;
 
-  DocReqContent({
-    required this.title,
+  VenueReqContent({
+    required this.name,
     required this.description,
+    required this.address,
     required this.lastMod,
     required this.CreatedOn,
     required this.price,
     required this.requirement,
+    required this.available,
   });
 
 
@@ -123,11 +130,11 @@ class DocReqContent extends StatelessWidget {
       children: [
         Container(
           alignment: Alignment.topCenter,
-          child: Text('$title', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black))),
+          child: Text('$name', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black))),
         Container(
           padding: EdgeInsets.only(top: 10,),
           alignment: Alignment.topLeft,
-          child: Text( 'Description: \n $description \n\nRequirements: \n${requirement} \n\nPrice: $price', 
+          child: Text( 'Address: $address\n\nDescription: \n $description\n\nOpen Hours: \n$available\n\nRequirements: \n${requirement} \n\nPrice: $price', 
           style: TextStyle(fontSize: 15), textAlign: TextAlign.justify,),
         ),            
       ],
@@ -135,11 +142,11 @@ class DocReqContent extends StatelessWidget {
   }
 }
 
-class DocReqButton extends StatelessWidget {
+class VenueReqButton extends StatelessWidget {
   //const DocReqButton({super.key,});
   String title;
 
-  DocReqButton({
+  VenueReqButton({
     required this.title,
   });
 
@@ -154,7 +161,7 @@ class DocReqButton extends StatelessWidget {
         ),
         onPressed: (){
           Navigator.push(
-            context, MaterialPageRoute(builder: (BuildContext context) => DrRegister(title: title,)));
+            context, MaterialPageRoute(builder: (BuildContext context) => VenueRequest(title: title,)));
         },
         child: Text('Request', style: TextStyle(fontSize: 15, color: Colors.white),),
       ),
