@@ -3,18 +3,21 @@ import 'package:flutter/material.dart';
 // import 'package:addhills_app/PAGE/DOCUMENT_REQUEST/doc_req_content.dart';
 import 'package:addhills_app/PAGE/TOP_BUTTONS/top_navigationpop.dart';
 
-class DocReqPress extends StatelessWidget {
+class EquipsContent extends StatelessWidget {
   var height,width;
-  String title,description,lastMod,CreatedOn,price,requirement;
+  String name,description,lastMod,CreatedOn,requirement,rules;
+  int quantity;
+  Map price;
 
-
-  DocReqPress({
-    required this.title,
+  EquipsContent({
+    required this.name,
     required this.description,
     required this.lastMod,
     required this.CreatedOn,
     required this.price,
     required this.requirement,
+    required this.rules,
+    required this.quantity,
   });
 
   @override
@@ -59,7 +62,7 @@ class DocReqPress extends StatelessWidget {
                               bottom: 15,
                             ),
                             child: Text(
-                              'Document Request',
+                              'Equipments',
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 25,
@@ -78,18 +81,20 @@ class DocReqPress extends StatelessWidget {
                             child: ListView(
                               padding: EdgeInsets.zero,
                               children: [
-                                DocReqContent(
-                                  title: title, 
+                                EquipReqContent(
+                                  name: name, 
                                   description: description, 
                                   lastMod: lastMod, 
                                   CreatedOn: CreatedOn, 
                                   price: price, 
                                   requirement: requirement,
+                                  rules: rules,
+                                  quantity: quantity,
                                 ),
                               ],
                             ),
                           ),
-                          DocReqButton(title: title,),
+                          EquipReqButton(title: name,),
                         ],
                       ),
                     ),
@@ -104,18 +109,64 @@ class DocReqPress extends StatelessWidget {
   }
 }
 
-class DocReqContent extends StatelessWidget {
-  String title,description,lastMod,CreatedOn,price,requirement;
+class EquipReqContent extends StatefulWidget {
+  final String name, description, lastMod, CreatedOn, requirement, rules;
+  int quantity;
+  final Map<dynamic, dynamic> price;
 
-  DocReqContent({
-    required this.title,
+  EquipReqContent({
+    required this.name,
     required this.description,
     required this.lastMod,
     required this.CreatedOn,
     required this.price,
     required this.requirement,
+    required this.rules,
+    required this.quantity,
   });
 
+  @override
+  _EquipReqContentState createState() => _EquipReqContentState();
+}
+
+class _EquipReqContentState extends State<EquipReqContent> {
+  Map<String, Map<String, int>> _nestedMap = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeNestedMap();
+  }
+
+  void _initializeNestedMap() {
+    setState(() {
+      _nestedMap = widget.price.map((key, value) {
+        // Ensure the inner map is correctly typed
+        var innerMap = (value as Map<dynamic, dynamic>).map((innerKey, innerValue) {
+          return MapEntry(innerKey as String, (innerValue as num).toInt());
+        });
+        return MapEntry(key as String, innerMap);
+      });
+    });
+  }
+
+  String _formatNestedMapToSentence(Map<String, Map<String, int?>> nestedMap) {
+  return nestedMap.entries
+    .map((categoryEntry) {
+      final category = categoryEntry.key;
+      final items = categoryEntry.value;
+
+      // Format each category with its items
+      return '$category: Quantity = ' + items.entries
+        .map((itemEntry) {
+          final value = itemEntry.value;
+          // If value is null, print "Free"; otherwise, print the value
+          return value == null ? 'Free' : '${value}';
+        })
+        .join(' / ₱');
+    })
+    .join('\n');
+}
 
   @override
   Widget build(BuildContext context) {
@@ -123,23 +174,38 @@ class DocReqContent extends StatelessWidget {
       children: [
         Container(
           alignment: Alignment.topCenter,
-          child: Text('$title', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black))),
+          child: Text(
+            widget.name,
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+          ),
+        ),
         Container(
-          padding: EdgeInsets.only(top: 10,),
+          padding: EdgeInsets.only(top: 10),
           alignment: Alignment.topLeft,
-          child: Text( 'Description: \n $description \n\nRequirements: \n${requirement} \n\nPrice: $price', 
-          style: TextStyle(fontSize: 15), textAlign: TextAlign.justify,),
-        ),            
+          child: Text(
+            'Description: \n${widget.description}\n\nItem Quantity: ${widget.quantity}\n\nRequirements: \n${widget.requirement}\n\nRules:\n${widget.rules}\n\nPrice:',
+            style: TextStyle(fontSize: 15),
+            textAlign: TextAlign.justify,
+          ),
+        ),
+        Container(
+          alignment: Alignment.topLeft,
+          child: Text(
+            _formatNestedMapToSentence(_nestedMap),
+            style: TextStyle(fontSize: 15),
+          ),
+        ),
       ],
     );
   }
 }
 
-class DocReqButton extends StatelessWidget {
+
+class EquipReqButton extends StatelessWidget {
   //const DocReqButton({super.key,});
   String title;
 
-  DocReqButton({
+  EquipReqButton({
     required this.title,
   });
 
@@ -153,8 +219,8 @@ class DocReqButton extends StatelessWidget {
           padding: EdgeInsets.only(left: 80, right: 80, top: 10, bottom: 10,),
         ),
         onPressed: (){
-          Navigator.push(
-            context, MaterialPageRoute(builder: (BuildContext context) => DrRegister(title: title,)));
+          // Navigator.push(
+          //   context, MaterialPageRoute(builder: (BuildContext context) => DrRegister(title: title,)));
         },
         child: Text('Request', style: TextStyle(fontSize: 15, color: Colors.white),),
       ),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:addhills_app/PAGE/DOCUMENT_REQUEST/document_request.dart';
 import 'package:addhills_app/PAGE/OTHER_SERVICES/burial_space_registration_page.dart';
-import 'package:addhills_app/PAGE/OTHER_SERVICES/venue_reservation_page.dart';
-import 'package:addhills_app/PAGE/OTHER_SERVICES/equipments_page.dart';
+import 'package:addhills_app/PAGE/OTHER_SERVICES/VENUE_PAGE/venue_reservation_page.dart';
+import 'package:addhills_app/PAGE/OTHER_SERVICES/EQUIPMENTS_PAGE/equipments_page.dart';
 import 'package:addhills_app/PAGE/home.dart';
 import 'package:addhills_app/PAGE/my_profile.dart';
 import 'package:addhills_app/PAGE/request_page.dart';
@@ -23,7 +23,7 @@ class MenuNotifProfile extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(
-              left: 20,
+              left: 30,
             ),
             child: IconButton(
               iconSize: 35,
@@ -37,23 +37,23 @@ class MenuNotifProfile extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(
-              right: 20,
+              right: 30,
             ),
             child: Row(
               children: [
                 Wrap(
                   spacing: -20.0,
                   children: [
-                    IconButton(
-                      iconSize: 35,
-                      icon: const Icon(
-                        Icons.notifications,
-                        color: Colors.white),
-                      onPressed: (){
-                        Navigator.push(
-                        context, MaterialPageRoute(builder: (BuildContext context) => RequestPage()));
-                      },          
-                    ),
+                    // IconButton(
+                    //   iconSize: 35,
+                    //   icon: const Icon(
+                    //     Icons.notifications,
+                    //     color: Colors.white),
+                    //   onPressed: (){
+                    //     Navigator.push(
+                    //     context, MaterialPageRoute(builder: (BuildContext context) => RequestPage()));
+                    //   },          
+                    // ),
                     IconButton(
                       iconSize: 35,
                       icon: const Icon(
@@ -97,7 +97,7 @@ static const TextStyle menuTextStyle = TextStyle(
               Padding(
                 padding: const EdgeInsets.only(
                   top: 70,
-                  left: 20,
+                  left: 30,
                 ),
                 child: IconButton(
                   iconSize: 35,

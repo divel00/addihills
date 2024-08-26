@@ -1,6 +1,13 @@
+import 'package:addhills_app/PAGE/OTHER_SERVICES/EQUIPMENTS_PAGE/equipments_page.dart';
+import 'package:addhills_app/PAGE/OTHER_SERVICES/VENUE_PAGE/item_Map.dart';
+import 'package:addhills_app/PAGE/OTHER_SERVICES/VENUE_PAGE/venue_request.dart';
+import 'package:addhills_app/PAGE/OTHER_SERVICES/VENUE_PAGE/venue_reservation_page.dart';
+import 'package:addhills_app/SERVICES/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'package:addhills_app/PAGE/DOCUMENT_REQUEST/doc_req_press.dart';
 import 'package:addhills_app/PAGE/DOCUMENT_REQUEST/document_request.dart';
@@ -27,9 +34,41 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      home: LoginPage(),
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        home: HomePage(),
     );
   }
 }
+
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return MultiProvider(
+  //     providers: [
+  //       Provider<AuthService>(create: (_) => AuthService()),
+  //       StreamProvider(create: (context) => context.read<AuthService>().authState,
+  //       initialData: null,)
+  //     ],
+  //     child: */ MaterialApp(
+  //       debugShowCheckedModeBanner: false,
+  //       title: 'Flutter Demo',
+  //       home: HomePage(),
+  //     ),
+  //   );
+  // }
+
+
+// class AuthWrapper extends StatelessWidget {
+//   const AuthWrapper({Key? key}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final firebaseUser = context.watch<User?>();
+
+//     if (firebaseUser != null) {
+//       return const HomePage();
+//     }
+//     return LoginPage();
+//   }
+// }
