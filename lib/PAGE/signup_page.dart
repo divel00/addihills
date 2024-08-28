@@ -288,7 +288,7 @@
 //                           onTap: () async {
 //                             signUpUser();
 //                             // debugPrint(_birthdayController.text);
-//                             //_formKey.currentState!.validate();
+//                             _formKey.currentState!.validate();
 //                             // Make sure _fname is not null
 //                           },
 //                           child: Container(
