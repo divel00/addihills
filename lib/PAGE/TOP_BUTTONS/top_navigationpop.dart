@@ -26,7 +26,7 @@ class TopNavigationpop extends StatelessWidget {
         Container(
           alignment: Alignment.topCenter,
           padding: EdgeInsets.only(top: 70),
-          child: Text('LogoName', style: TextStyle(color:color, fontSize: 35),),
+          child: Text('RequEase', style: TextStyle(color:color, fontSize: 35),),
         ),
       ],
     );

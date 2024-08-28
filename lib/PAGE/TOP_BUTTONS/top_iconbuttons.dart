@@ -35,40 +35,40 @@ class MenuNotifProfile extends StatelessWidget {
               },          
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-              right: 30,
-            ),
-            child: Row(
-              children: [
-                Wrap(
-                  spacing: -20.0,
-                  children: [
-                    // IconButton(
-                    //   iconSize: 35,
-                    //   icon: const Icon(
-                    //     Icons.notifications,
-                    //     color: Colors.white),
-                    //   onPressed: (){
-                    //     Navigator.push(
-                    //     context, MaterialPageRoute(builder: (BuildContext context) => RequestPage()));
-                    //   },          
-                    // ),
-                    IconButton(
-                      iconSize: 35,
-                      icon: const Icon(
-                        Icons.account_circle,
-                        color: Colors.white),
-                      onPressed: (){
-                        Navigator.push(
-                        context, MaterialPageRoute(builder: (BuildContext context) => ProfileIcon()));
-                      },   
-                    ),
-                  ]
-                ),
-              ],
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.only(
+          //     right: 30,
+          //   ),
+          //   child: Row(
+          //     children: [
+          //       Wrap(
+          //         spacing: -20.0,
+          //         children: [
+          //           // IconButton(
+          //           //   iconSize: 35,
+          //           //   icon: const Icon(
+          //           //     Icons.notifications,
+          //           //     color: Colors.white),
+          //           //   onPressed: (){
+          //           //     Navigator.push(
+          //           //     context, MaterialPageRoute(builder: (BuildContext context) => RequestPage()));
+          //           //   },          
+          //           // ),
+          //           IconButton(
+          //             iconSize: 35,
+          //             icon: const Icon(
+          //               Icons.account_circle,
+          //               color: Colors.white),
+          //             onPressed: (){
+          //               Navigator.push(
+          //               context, MaterialPageRoute(builder: (BuildContext context) => ProfileIcon()));
+          //             },   
+          //           ),
+          //         ]
+          //       ),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );
@@ -175,13 +175,13 @@ static const TextStyle menuTextStyle = TextStyle(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          ListTile(
-                            title: const Text('Burial Space Registration',style: menuTextStyle),
-                            onTap: () {
-                              Navigator.push(
-                                context, MaterialPageRoute(builder: (BuildContext context) => BurialSpaceRegistrationPage()));
-                            },
-                          ),
+                          // ListTile(
+                          //   title: const Text('Burial Space Registration',style: menuTextStyle),
+                          //   onTap: () {
+                          //     Navigator.push(
+                          //       context, MaterialPageRoute(builder: (BuildContext context) => BurialSpaceRegistrationPage()));
+                          //   },
+                          // ),
                           ListTile(
                             title: const Text('Venue Reservation',style: menuTextStyle),
                             onTap: () {
