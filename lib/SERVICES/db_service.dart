@@ -1,3 +1,4 @@
+import 'package:addhills_app/MODELS/Requests/equips_request_model.dart';
 import 'package:addhills_app/MODELS/Requests/venue_request_model.dart';
 import 'package:addhills_app/MODELS/docs.dart';
 import 'package:addhills_app/MODELS/Requests/docu_request.dart';
@@ -13,6 +14,7 @@ const String VENUES_COLLECTION_REF = 'event_venue';
 const String USERINFO_COLLECTION_REF = 'apptest';
 const String DOCREQ_COLLECTION_REF = 'document_requests';
 const String VENUEREQ_COLLECTION_REF = 'venue_requests';
+const String EQUIPREQ_COLLECTION_REF = 'equipment_requests';
 
 class DbService {
   final _firestore = FirebaseFirestore.instance;
@@ -23,6 +25,7 @@ class DbService {
   late final CollectionReference<Venues> _venueRef;
   late final CollectionReference<Users> _userInfoRef;
   late final CollectionReference<VenueRequestModel> _venueReqRef;
+  late final CollectionReference<EquipsRequestModel> _equipReqRef;
 
   DbService() {
     _docsRef = _firestore.collection(DOCS_COLLECTION_REF).withConverter<Docs>(
@@ -53,6 +56,11 @@ class DbService {
     _venueReqRef = _firestore.collection(VENUEREQ_COLLECTION_REF).withConverter<VenueRequestModel>(
       fromFirestore: (snapshots, _) => VenueRequestModel.fromJson(snapshots.data()!),
       toFirestore: (venuereq, _) => venuereq.toJson(),
+    );
+
+    _equipReqRef = _firestore.collection(EQUIPREQ_COLLECTION_REF).withConverter<EquipsRequestModel>(
+      fromFirestore: (snapshots, _) => EquipsRequestModel.fromJson(snapshots.data()!),
+      toFirestore: (equipreq, _) => equipreq.toJson(),
     );
   }
 
@@ -96,6 +104,10 @@ class DbService {
 
   void addVenueReq(String id, VenueRequestModel venuereq) async {
     await _venueReqRef.doc(id).set(venuereq);
+  }
+
+  void addEquipReq(String id, EquipsRequestModel equipreq) async {
+    await _equipReqRef.doc(id).set(equipreq);
   }
 
   void addUserInfo(String id, Users userInfo) async {

@@ -1,4 +1,5 @@
 import 'package:addhills_app/PAGE/DOCUMENT_REQUEST/dr_register.dart';
+import 'package:addhills_app/PAGE/OTHER_SERVICES/EQUIPMENTS_PAGE/equipments_request.dart';
 import 'package:flutter/material.dart';
 // import 'package:addhills_app/PAGE/DOCUMENT_REQUEST/doc_req_content.dart';
 import 'package:addhills_app/PAGE/TOP_BUTTONS/top_navigationpop.dart';
@@ -183,7 +184,7 @@ class _EquipReqContentState extends State<EquipReqContent> {
           padding: EdgeInsets.only(top: 10),
           alignment: Alignment.topLeft,
           child: Text(
-            'Description: \n${widget.description}\n\nItem Quantity: ${widget.quantity}\n\nRequirements: \n${widget.requirement}\n\nRules:\n${widget.rules}\n\nPrice:',
+            'Description: \n${widget.description}\n\nItem Quantity: ${widget.quantity}\n\nRequirements: \n${widget.requirement}\n\nRules:\n${widget.rules}\n\nFee:',
             style: TextStyle(fontSize: 15),
             textAlign: TextAlign.justify,
           ),
@@ -219,8 +220,8 @@ class EquipReqButton extends StatelessWidget {
           padding: EdgeInsets.only(left: 80, right: 80, top: 10, bottom: 10,),
         ),
         onPressed: (){
-          // Navigator.push(
-          //   context, MaterialPageRoute(builder: (BuildContext context) => DrRegister(title: title,)));
+          Navigator.push(
+            context, MaterialPageRoute(builder: (BuildContext context) => EquipmentsRequest(title: title,)));
         },
         child: Text('Request', style: TextStyle(fontSize: 15, color: Colors.white),),
       ),

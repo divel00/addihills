@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class VenueRequestModel {
-  String venue_name;
+class EquipsRequestModel {
+  String selected_time;
   String requester_name;
   String address;
   String birthday;
@@ -12,10 +12,10 @@ class VenueRequestModel {
   String selected_date;
   String purpose;
   String contact_number;
-  List<String> additional_equipments; 
+  List<String> equipments; 
   
-  VenueRequestModel({
-    required this.venue_name,
+  EquipsRequestModel({
+    required this.selected_time,
     required this.requester_name,
     required this.address,
     required this.birthday,
@@ -26,12 +26,12 @@ class VenueRequestModel {
     required this.user_age,
     required this.purpose,
     required this.contact_number,
-    required this.additional_equipments,
+    required this.equipments,
   });
 
-  VenueRequestModel.fromJson(Map<String, Object?> json) :
+  EquipsRequestModel.fromJson(Map<String, Object?> json) :
   this(
-    venue_name: json['venue_name']! as String,
+    selected_time: json['selected_time']! as String,
     requester_name: json['requester_name']! as String,
     address: json['address']! as String,
     birthday: json['birthday']! as String,
@@ -42,11 +42,11 @@ class VenueRequestModel {
     user_age: json['user_age']! as String,
     purpose: json['purpose']! as String,
     contact_number: json['contact_number']! as String,
-    additional_equipments: json['additional_equipments'] as List<String>,
+    equipments: json['equipments'] as List<String>,
   );
 
-  VenueRequestModel copyWith({
-    String? venue_name,
+  EquipsRequestModel copyWith({
+    String? selected_time,
     String? requester_name,
     String? address,
     String? birthday,
@@ -57,10 +57,10 @@ class VenueRequestModel {
     String? user_age,
     String? purpose,
     String? contact_number,
-    List<String>? additional_equipments,
+    List<String>? equipments,
   }) {
-    return VenueRequestModel(
-      venue_name: venue_name ?? this.venue_name,
+    return EquipsRequestModel(
+      selected_time: selected_time ?? this.selected_time,
       requester_name: requester_name ?? this.requester_name,
       address: address ?? this.address, 
       birthday: birthday ?? this.birthday, 
@@ -71,13 +71,13 @@ class VenueRequestModel {
       user_age: user_age ?? this.user_age,
       purpose: purpose ?? this.purpose,
       contact_number: contact_number ?? this.contact_number,
-      additional_equipments: additional_equipments ?? this.additional_equipments,
+      equipments: equipments ?? this.equipments,
     );
   }
 
   Map<String, Object?> toJson(){
     return {
-      'venue_name': venue_name,
+      'selected_time': selected_time,
       'requester_name': requester_name,
       'address': address,
       'birthday': birthday,
@@ -88,7 +88,7 @@ class VenueRequestModel {
       'user_age': user_age,
       'purpose': purpose,
       'contact_number': contact_number,
-      'additional_equipments': additional_equipments,
+      'equipments': equipments,
     };
   }
 }

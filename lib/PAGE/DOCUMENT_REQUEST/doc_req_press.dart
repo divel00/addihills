@@ -127,7 +127,7 @@ class DocReqContent extends StatelessWidget {
         Container(
           padding: EdgeInsets.only(top: 10,),
           alignment: Alignment.topLeft,
-          child: Text( 'Description: \n $description \n\nRequirements: \n${requirement} \n\nPrice: $price', 
+          child: Text( 'Description: \n $description \n\nRequirements: \n${requirement} \n\nFee: $price', 
           style: TextStyle(fontSize: 15), textAlign: TextAlign.justify,),
         ),            
       ],

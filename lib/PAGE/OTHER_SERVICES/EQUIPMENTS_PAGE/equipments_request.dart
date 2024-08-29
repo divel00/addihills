@@ -1,6 +1,8 @@
 import 'package:addhills_app/MODELS/Requests/docu_request.dart';
+import 'package:addhills_app/MODELS/Requests/equips_request_model.dart';
 import 'package:addhills_app/MODELS/Requests/venue_request_model.dart';
 import 'package:addhills_app/PAGE/DOCUMENT_REQUEST/document_request.dart';
+import 'package:addhills_app/PAGE/OTHER_SERVICES/EQUIPMENTS_PAGE/equipments_page.dart';
 import 'package:addhills_app/PAGE/OTHER_SERVICES/VENUE_PAGE/item_Map.dart';
 import 'package:addhills_app/PAGE/OTHER_SERVICES/VENUE_PAGE/venue_reservation_page.dart';
 import 'package:addhills_app/SERVICES/db_service.dart';
@@ -9,10 +11,11 @@ import 'package:addhills_app/utils/methods.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:addhills_app/PAGE/TOP_BUTTONS/top_navigationpop.dart';
+import 'package:intl/intl.dart';
 
 final _formKey = GlobalKey<FormState>();
 
-class VenueRequest extends StatelessWidget {
+class EquipmentsRequest extends StatelessWidget {
   var height,width;
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -22,11 +25,14 @@ class VenueRequest extends StatelessWidget {
   final TextEditingController purposeController = TextEditingController();
   final TextEditingController setDate = TextEditingController();
   final TextEditingController additionalRequirementsController = TextEditingController();
+  final TextEditingController startTimeController = TextEditingController();
+  final TextEditingController endTimeController = TextEditingController();
+
   
   
   String title;
 
-  VenueRequest({
+  EquipmentsRequest({
     required this.title,
   });
 
@@ -73,7 +79,7 @@ class VenueRequest extends StatelessWidget {
                                 bottom: 15,
                               ),
                               child: Text(
-                                'Document Request',
+                                'Equipment Request',
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 25,
@@ -92,24 +98,25 @@ class VenueRequest extends StatelessWidget {
                               child: ListView(
                                 padding: EdgeInsets.zero,
                                 children: [
-                                  VenueForm(
+                                  EquipsForm(
                                     nameController: nameController, 
                                     emailController: emailController, 
                                     contacNumController: contacNumController, 
                                     addressController: addressController, 
                                     bdayController: bdayController, 
-                                    setDateController: setDate, 
-                                    title: title,
+                                    setDateController: setDate,
                                     purposeController: purposeController, 
                                     additionalRequirementsController: additionalRequirementsController,
+                                    startTimeController: startTimeController, 
+                                    endTimeController: endTimeController,
                                   )
                                 ],
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 5),
-                              child: VenueSubmit(
-                                title: title, 
+                              child: EquipsSubmit(
+                                //title: title, 
                                 nameController: nameController, 
                                 emailController: emailController, 
                                 contacNumController: contacNumController, 
@@ -117,7 +124,9 @@ class VenueRequest extends StatelessWidget {
                                 bdayController: bdayController,
                                 setDateController: setDate,
                                 purposeController: purposeController,
-                                additionalRequirementsController: additionalRequirementsController,
+                                additionalRequirementsController: additionalRequirementsController, 
+                                startTimeController: startTimeController, 
+                                endTimeController: endTimeController,
                               ),
                             )
                           ],
@@ -135,7 +144,7 @@ class VenueRequest extends StatelessWidget {
   }
 }
 
-class VenueForm extends StatefulWidget {
+class EquipsForm extends StatefulWidget {
   final TextEditingController nameController;
   final TextEditingController emailController;
   final TextEditingController contacNumController;
@@ -144,10 +153,10 @@ class VenueForm extends StatefulWidget {
   final TextEditingController setDateController;
   final TextEditingController purposeController;
   final TextEditingController additionalRequirementsController;
-  final String title;
+  final TextEditingController startTimeController;
+  final TextEditingController endTimeController;
 
-  VenueForm({
-    required this.title,
+  EquipsForm({
     required this.nameController,
     required this.emailController,
     required this.contacNumController,
@@ -156,21 +165,23 @@ class VenueForm extends StatefulWidget {
     required this.setDateController,
     required this.purposeController,
     required this.additionalRequirementsController,
+    required this.startTimeController,
+    required this.endTimeController,
   });
 
   @override
-  State<VenueForm> createState() => _VenueFormState();
+  State<EquipsForm> createState() => _EquipsFormState();
 }
 
-class _VenueFormState extends State<VenueForm> {
+class _EquipsFormState extends State<EquipsForm> {
   @override
   Widget build(BuildContext context) {
 
     return Column(
       children: [
-        Container(
-          alignment: Alignment.topCenter,
-          child: Text('${widget.title}', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black))),
+        // Container(
+        //   alignment: Alignment.topCenter,
+        //   child: Text('${widget.title}', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black))),
         Container(
           padding: EdgeInsets.only(top: 8),
           alignment: Alignment.topLeft,
@@ -192,20 +203,43 @@ class _VenueFormState extends State<VenueForm> {
               buildAddress(), 
               headerForTfield(text: 'Purpose',),
               buildPurpose(),    
+              SizedBox(height: 30),   
+                // Text(
+                //   'Additional Requests',
+                //   style: TextStyle(
+                //     color: Colors.black54,
+                //   ),
+                // ),
+                Divider(
+                  color: Colors.black54
+                ),
               headerForTfield(text: 'Reservation Date',),
-              buildSetDate(), 
+              buildSetDate(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    width: 150,
+                    child: Column(
+                      children: [
+                        headerForTfield(text: 'Start Time'),
+                        buildStartTime(),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: 150,
+                    child: Column(
+                      children: [
+                        headerForTfield(text: 'End Time'),
+                        buildEndTime(),
+                      ],
+                    ),
+                  )
+                ],
+              ), 
             ],
           ),
-        ),
-        SizedBox(height: 30),   
-        Text(
-          'Additional Requests',
-          style: TextStyle(
-            color: Colors.black54,
-          ),
-        ),
-        Divider(
-          color: Colors.black54
         ),
         headerForTfield(text: 'Equipments'),
         EquipmentBox(equipmentController: widget.additionalRequirementsController)
@@ -324,6 +358,42 @@ class _VenueFormState extends State<VenueForm> {
     },
   );
 
+  Widget buildStartTime() => TextField(
+    controller: widget.startTimeController,
+    style: TextStyle(fontSize: 15),
+    decoration: InputDecoration(
+      //hintText: 'Araw ng pagreserba',
+      border: OutlineInputBorder(),
+      //isDense: true,
+      contentPadding: EdgeInsets.all(8),
+      suffixIcon: Icon(Icons.access_time),
+    ),
+    textInputAction: TextInputAction.done,
+    //keyboardType: TextInputType.datetime,
+    readOnly: true,
+    onTap: () {
+      _selectTime(context, widget.startTimeController);
+    },
+  );
+
+  Widget buildEndTime() => TextField(
+    controller: widget.endTimeController,
+    style: TextStyle(fontSize: 15),
+    decoration: InputDecoration(
+      //hintText: 'Araw ng pagreserba',
+      border: OutlineInputBorder(),
+      //isDense: true,
+      contentPadding: EdgeInsets.all(8),
+      suffixIcon: Icon(Icons.access_time),
+    ),
+    textInputAction: TextInputAction.done,
+    //keyboardType: TextInputType.datetime,
+    readOnly: true,
+    onTap: () {
+      _selectTime(context, widget.endTimeController);
+    },
+  );
+
   Widget buildPurpose() => TextField(
     controller: widget.purposeController,
     style: TextStyle(fontSize: 15),
@@ -336,6 +406,33 @@ class _VenueFormState extends State<VenueForm> {
     textInputAction: TextInputAction.done,
     //keyboardType: TextInputType.streetAddress,
   );
+
+  Future<void> _selectTime(BuildContext context, TextEditingController controller) async {
+  TimeOfDay? _picked = await showTimePicker(
+    context: context,
+    initialTime: TimeOfDay.now(),
+    initialEntryMode: TimePickerEntryMode.input,
+  );
+
+  if (_picked != null) {
+    // Convert TimeOfDay to DateTime
+    final now = DateTime.now();
+    final selectedTime = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      _picked.hour,
+      _picked.minute,
+    );
+
+    // Format the DateTime to 'HH:mm a'
+    final formattedTime = DateFormat('h:mm a').format(selectedTime);
+
+    setState(() {
+      controller.text = formattedTime;
+    });
+  }
+}
 
   Future<void> _selectDate(BuildContext context, TextEditingController controller) async{
     DateTime? _picked = await showDatePicker(
@@ -351,7 +448,6 @@ class _VenueFormState extends State<VenueForm> {
       });
     }
   }
-
 }
 
 class headerForTfield extends StatelessWidget {
@@ -367,7 +463,7 @@ class headerForTfield extends StatelessWidget {
   }
 }
 
-class VenueSubmit extends StatelessWidget {
+class EquipsSubmit extends StatelessWidget {
   final TextEditingController nameController;
   final TextEditingController emailController;
   final TextEditingController contacNumController;
@@ -376,10 +472,11 @@ class VenueSubmit extends StatelessWidget {
   final TextEditingController setDateController;
   final TextEditingController purposeController;
   final TextEditingController additionalRequirementsController;
-  final String title;
+  final TextEditingController startTimeController;
+  final TextEditingController endTimeController;
+  
 
-  VenueSubmit({
-    required this.title,
+  EquipsSubmit({
     required this.nameController,
     required this.emailController,
     required this.contacNumController,
@@ -388,6 +485,8 @@ class VenueSubmit extends StatelessWidget {
     required this.setDateController,
     required this.purposeController,
     required this.additionalRequirementsController,
+    required this.startTimeController,
+    required this.endTimeController,
   });
 
   final DbService _dbService = DbService();
@@ -408,8 +507,7 @@ class VenueSubmit extends StatelessWidget {
             _showDialog(context, 'Error', 'Please ensure all fields are completed and valid.');
           }
           else if(_formKey.currentState!.validate()){
-            VenueRequestModel venuereq = VenueRequestModel(
-              venue_name: title,
+            EquipsRequestModel equipreq = EquipsRequestModel(
               requester_name: nameController.text, 
               address: addressController.text, 
               birthday: bdayController.text, 
@@ -420,9 +518,10 @@ class VenueSubmit extends StatelessWidget {
               user_age: calculateAge(bdayController.text),
               purpose: purposeController.text, 
               contact_number: contacNumController.text, 
-              additional_equipments: parseEquipments(additionalRequirementsController.text),
+              equipments: parseEquipments(additionalRequirementsController.text), 
+              selected_time: '${startTimeController.text} - ${endTimeController.text}',
             );
-            _dbService.addVenueReq(generateTimestampBasedId(), venuereq);
+            _dbService.addEquipReq(generateTimestampBasedId(), equipreq);
             
             nameController.clear();
             emailController.clear();
@@ -432,13 +531,15 @@ class VenueSubmit extends StatelessWidget {
             setDateController.clear();
             purposeController.clear();
             additionalRequirementsController.clear();
+            startTimeController.clear();
+            endTimeController.clear();
 
             await _showDialog(
               context, 
               'Success', 
               'Your request has been submitted. An email will be sent to you once your request is approved.'
             );
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => VenueReservationPage()));
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => EquipmentsPage()));
           }
         },
         child: Text('Submit', style: TextStyle(fontSize: 15, color: Colors.white),),

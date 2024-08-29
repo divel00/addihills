@@ -134,7 +134,7 @@ class VenueReqContent extends StatelessWidget {
         Container(
           padding: EdgeInsets.only(top: 10,),
           alignment: Alignment.topLeft,
-          child: Text( 'Address: $address\n\nDescription: \n $description\n\nOpen Hours: \n$available\n\nRequirements: \n${requirement} \n\nPrice: $price', 
+          child: Text( 'Address: $address\n\nDescription: \n $description\n\nOpen Hours: \n$available\n\nRequirements: \n${requirement} \n\nFee: $price', 
           style: TextStyle(fontSize: 15), textAlign: TextAlign.justify,),
         ),            
       ],
