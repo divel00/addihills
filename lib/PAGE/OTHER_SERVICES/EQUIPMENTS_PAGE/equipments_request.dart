@@ -408,31 +408,31 @@ class _EquipsFormState extends State<EquipsForm> {
   );
 
   Future<void> _selectTime(BuildContext context, TextEditingController controller) async {
-  TimeOfDay? _picked = await showTimePicker(
-    context: context,
-    initialTime: TimeOfDay.now(),
-    initialEntryMode: TimePickerEntryMode.input,
-  );
-
-  if (_picked != null) {
-    // Convert TimeOfDay to DateTime
-    final now = DateTime.now();
-    final selectedTime = DateTime(
-      now.year,
-      now.month,
-      now.day,
-      _picked.hour,
-      _picked.minute,
+    TimeOfDay? _picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+      initialEntryMode: TimePickerEntryMode.input,
     );
 
-    // Format the DateTime to 'HH:mm a'
-    final formattedTime = DateFormat('h:mm a').format(selectedTime);
+    if (_picked != null) {
+      // Convert TimeOfDay to DateTime
+      final now = DateTime.now();
+      final selectedTime = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        _picked.hour,
+        _picked.minute,
+      );
 
-    setState(() {
-      controller.text = formattedTime;
-    });
+      // Format the DateTime to 'HH:mm a'
+      final formattedTime = DateFormat('h:mm a').format(selectedTime);
+
+      setState(() {
+        controller.text = formattedTime;
+      });
+    }
   }
-}
 
   Future<void> _selectDate(BuildContext context, TextEditingController controller) async{
     DateTime? _picked = await showDatePicker(
@@ -507,39 +507,7 @@ class EquipsSubmit extends StatelessWidget {
             _showDialog(context, 'Error', 'Please ensure all fields are completed and valid.');
           }
           else if(_formKey.currentState!.validate()){
-            EquipsRequestModel equipreq = EquipsRequestModel(
-              requester_name: nameController.text, 
-              address: addressController.text, 
-              birthday: bdayController.text, 
-              request_status: "pending", 
-              user_email: emailController.text,
-              date_requested: Timestamp.now(),
-              selected_date: setDateController.text,
-              user_age: calculateAge(bdayController.text),
-              purpose: purposeController.text, 
-              contact_number: contacNumController.text, 
-              equipments: parseEquipments(additionalRequirementsController.text), 
-              selected_time: '${startTimeController.text} - ${endTimeController.text}',
-            );
-            _dbService.addEquipReq(generateTimestampBasedId(), equipreq);
-            
-            nameController.clear();
-            emailController.clear();
-            contacNumController.clear();
-            addressController.clear();
-            bdayController.clear();
-            setDateController.clear();
-            purposeController.clear();
-            additionalRequirementsController.clear();
-            startTimeController.clear();
-            endTimeController.clear();
-
-            await _showDialog(
-              context, 
-              'Success', 
-              'Your request has been submitted. An email will be sent to you once your request is approved.'
-            );
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => EquipmentsPage()));
+            submitRequest(context);
           }
         },
         child: Text('Submit', style: TextStyle(fontSize: 15, color: Colors.white),),
@@ -580,4 +548,45 @@ class EquipsSubmit extends StatelessWidget {
       },
     );
   }
+
+  void submitRequest(BuildContext context) async {
+    bool confirmed = await showConfirmationDialog(context);
+
+    if (confirmed) {
+      EquipsRequestModel equipreq = EquipsRequestModel(
+        requester_name: nameController.text, 
+        address: addressController.text, 
+        birthday: bdayController.text, 
+        request_status: "pending", 
+        user_email: emailController.text,
+        date_requested: Timestamp.now(),
+        selected_date: setDateController.text,
+        user_age: calculateAge(bdayController.text),
+        purpose: purposeController.text, 
+        contact_number: contacNumController.text, 
+        equipments: parseEquipments(additionalRequirementsController.text), 
+        selected_time: '${startTimeController.text} - ${endTimeController.text}',
+      );
+      _dbService.addEquipReq(generateTimestampBasedId(), equipreq);
+      
+      nameController.clear();
+      emailController.clear();
+      contacNumController.clear();
+      addressController.clear();
+      bdayController.clear();
+      setDateController.clear();
+      purposeController.clear();
+      additionalRequirementsController.clear();
+      startTimeController.clear();
+      endTimeController.clear();
+
+      await _showDialog(
+        context, 
+        'Success', 
+        'Your request has been submitted. An email will be sent to you once your request is approved.'
+      );
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => EquipmentsPage()));
+    }
+  }
+
 }

@@ -351,14 +351,6 @@ class DrSubmit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Timestamp now = Timestamp.now();
-    // Convert Timestamp to DateTime
-    DateTime nowDateTime = now.toDate();
-    // Add 6 days to the current DateTime
-    DateTime futureDateTime = nowDateTime.add(Duration(days: 6));
-    // Convert the future DateTime back to Firestore Timestamp
-    Timestamp futureTimestamp = Timestamp.fromDate(futureDateTime);
-
     return Container(
       alignment: Alignment.bottomCenter,
       child: ElevatedButton(
@@ -373,34 +365,7 @@ class DrSubmit extends StatelessWidget {
             _showDialog(context, 'Error', 'Please ensure all fields are completed and valid.');
           }
           else if(_formKey.currentState!.validate()){
-            DocuRequest docsreq = DocuRequest(
-              document_title: title,
-              requester_name: nameController.text, 
-              address: addressController.text, 
-              birthday: bdayController.text, 
-              request_status: "pending", 
-              user_email: emailController.text,
-              date_requested: Timestamp.now(),
-              pickup_date: futureTimestamp, 
-              years_of_residence: calculateYearsAndMonthsOfResidence(residenceController.text), 
-              user_age: calculateAge(bdayController.text), 
-              contact_number: contacNumController.text,
-            );
-            _dbService.addDocsReq(generateTimestampBasedId(),docsreq);
-            
-            nameController.clear();
-            emailController.clear();
-            contacNumController.clear();
-            addressController.clear();
-            bdayController.clear();
-            residenceController.clear();
-
-            await _showDialog(
-              context, 
-              'Success', 
-              'Your request has been submitted. An email will be sent to you once your request is approved.'
-            );
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => DocuPage()));
+            submitRequest(context);
           }
         },
         child: Text('Submit', style: TextStyle(fontSize: 15, color: Colors.white),),
@@ -436,10 +401,40 @@ class DrSubmit extends StatelessWidget {
       },
     );
   }
+
+  void submitRequest(BuildContext context) async {
+    bool confirmed = await showConfirmationDialog(context);
+
+    if (confirmed) {
+      DocuRequest docsreq = DocuRequest(
+        document_title: title,
+        requester_name: nameController.text, 
+        address: addressController.text, 
+        birthday: bdayController.text, 
+        request_status: "pending", 
+        user_email: emailController.text,
+        date_requested: Timestamp.now(),
+        pickup_date: addtimestamp(), 
+        years_of_residence: calculateYearsAndMonthsOfResidence(residenceController.text), 
+        user_age: calculateAge(bdayController.text), 
+        contact_number: contacNumController.text,
+      );
+      _dbService.addDocsReq(generateTimestampBasedId(),docsreq);
+      
+      nameController.clear();
+      emailController.clear();
+      contacNumController.clear();
+      addressController.clear();
+      bdayController.clear();
+      residenceController.clear();
+
+      await _showDialog(
+        context, 
+        'Success', 
+        'Your request has been submitted. An email will be sent to you once your request is approved.'
+      );
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => DocuPage()));
+    }
+  }
+  
 }
-
-
-
-
-
-// checkpoint: todo: test submiting the date for residency

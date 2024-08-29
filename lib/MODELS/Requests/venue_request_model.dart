@@ -13,6 +13,7 @@ class VenueRequestModel {
   String purpose;
   String contact_number;
   List<String> additional_equipments; 
+  String selected_time;
   
   VenueRequestModel({
     required this.venue_name,
@@ -27,6 +28,7 @@ class VenueRequestModel {
     required this.purpose,
     required this.contact_number,
     required this.additional_equipments,
+    required this.selected_time,
   });
 
   VenueRequestModel.fromJson(Map<String, Object?> json) :
@@ -43,6 +45,7 @@ class VenueRequestModel {
     purpose: json['purpose']! as String,
     contact_number: json['contact_number']! as String,
     additional_equipments: json['additional_equipments'] as List<String>,
+    selected_time: json['selected_time']! as String,
   );
 
   VenueRequestModel copyWith({
@@ -58,6 +61,7 @@ class VenueRequestModel {
     String? purpose,
     String? contact_number,
     List<String>? additional_equipments,
+    String? selected_time,
   }) {
     return VenueRequestModel(
       venue_name: venue_name ?? this.venue_name,
@@ -72,6 +76,7 @@ class VenueRequestModel {
       purpose: purpose ?? this.purpose,
       contact_number: contact_number ?? this.contact_number,
       additional_equipments: additional_equipments ?? this.additional_equipments,
+      selected_time: selected_time ?? this.selected_time,
     );
   }
 
@@ -89,6 +94,7 @@ class VenueRequestModel {
       'purpose': purpose,
       'contact_number': contact_number,
       'additional_equipments': additional_equipments,
+      'selected_time': selected_time,
     };
   }
 }

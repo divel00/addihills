@@ -62,7 +62,7 @@ class VenueContent extends StatelessWidget {
                               bottom: 15,
                             ),
                             child: Text(
-                              'Equipments',
+                              'Vanue Reservation',
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 25,

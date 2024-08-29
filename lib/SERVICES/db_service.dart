@@ -1,5 +1,6 @@
 import 'package:addhills_app/MODELS/Requests/equips_request_model.dart';
 import 'package:addhills_app/MODELS/Requests/venue_request_model.dart';
+import 'package:addhills_app/MODELS/announcements.dart';
 import 'package:addhills_app/MODELS/docs.dart';
 import 'package:addhills_app/MODELS/Requests/docu_request.dart';
 import 'package:addhills_app/MODELS/equips.dart';
@@ -11,7 +12,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 const String DOCS_COLLECTION_REF = 'documents';
 const String EQUIPS_COLLECTION_REF = 'event_equipment';
 const String VENUES_COLLECTION_REF = 'event_venue';
-const String USERINFO_COLLECTION_REF = 'apptest';
+const String ANNOUNCEMENT_COLLECTION_REF = 'announcements';
 const String DOCREQ_COLLECTION_REF = 'document_requests';
 const String VENUEREQ_COLLECTION_REF = 'venue_requests';
 const String EQUIPREQ_COLLECTION_REF = 'equipment_requests';
@@ -23,7 +24,7 @@ class DbService {
   late final CollectionReference<DocuRequest> _docsReqRef;
   late final CollectionReference<Equips> _equipRef;
   late final CollectionReference<Venues> _venueRef;
-  late final CollectionReference<Users> _userInfoRef;
+  late final CollectionReference<Announcements> _announcementRef;
   late final CollectionReference<VenueRequestModel> _venueReqRef;
   late final CollectionReference<EquipsRequestModel> _equipReqRef;
 
@@ -48,9 +49,9 @@ class DbService {
       toFirestore: (venue, _) => venue.toJson(),
     );
 
-    _userInfoRef = _firestore.collection(USERINFO_COLLECTION_REF).withConverter<Users>(
-      fromFirestore: (snapshots, _) => Users.fromJson(snapshots.data()!),
-      toFirestore: (userInfo, _) => userInfo.toJson(),
+    _announcementRef = _firestore.collection(ANNOUNCEMENT_COLLECTION_REF).withConverter<Announcements>(
+      fromFirestore: (snapshots, _) => Announcements.fromJson(snapshots.data()!),
+      toFirestore: (announce, _) => announce.toJson(),
     );
 
     _venueReqRef = _firestore.collection(VENUEREQ_COLLECTION_REF).withConverter<VenueRequestModel>(
@@ -81,8 +82,8 @@ class DbService {
     return _venueRef.snapshots();
   }
 
-  Stream<QuerySnapshot<Users>> getUsers() {
-    return _userInfoRef.snapshots();
+  Stream<QuerySnapshot<Announcements>> getAnnouncements() {
+    return _announcementRef.snapshots();
   }
 
   // Fetch equipment
@@ -108,10 +109,6 @@ class DbService {
 
   void addEquipReq(String id, EquipsRequestModel equipreq) async {
     await _equipReqRef.doc(id).set(equipreq);
-  }
-
-  void addUserInfo(String id, Users userInfo) async {
-    await _userInfoRef.doc(id).set(userInfo);
   }
 }
 
