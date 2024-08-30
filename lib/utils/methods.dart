@@ -1,6 +1,38 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dart:math';
+
+Future<bool> showConfirmationDialog(BuildContext context) async {
+// Show the dialog
+  final bool? result = await showDialog<bool>(
+    context: context,
+    barrierDismissible: false, // Prevents closing the dialog by tapping outside
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Confirm Submission'),
+        content: Text('Are you sure you want to submit this request?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(false); // User clicked Cancel
+            },
+            child: Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(true); // User clicked Confirm
+            },
+            child: Text('Confirm'),
+          ),
+        ],
+      );
+    },
+  );
+
+  // Ensure that a non-null boolean value is returned
+  return result ?? false;
+}
 
 // DateTime parseDate(String dateString) {
 //     try {
@@ -22,7 +54,6 @@ import 'dart:math';
 
 //   return age as String;
 // }
-
 
 
 String calculateAge(String dateString) {
@@ -58,7 +89,7 @@ String calculateYearsAndMonthsOfResidence(String dateString) {
   }
 
   // Return formatted result
-  return '${years} years and ${months} months';
+  return '${years} years, ${months} months';
 }
 
 
@@ -79,4 +110,18 @@ Timestamp addtimestamp(){
     Timestamp futureTimestamp = Timestamp.fromDate(futureDateTime);
 
   return futureTimestamp;
+}
+
+// Method to convert Timestamp to a formatted DateTime string
+String convertTimestampToString(Timestamp timestamp) {
+  // Convert Timestamp to DateTime
+  DateTime dateTime = timestamp.toDate();
+
+  // Define the format you want
+  DateFormat formatter = DateFormat('yyyy-MM-dd'); // Example format
+
+  // Format the DateTime object
+  String formattedDate = formatter.format(dateTime);
+
+  return formattedDate;
 }

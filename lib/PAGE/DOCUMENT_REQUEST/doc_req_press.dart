@@ -89,7 +89,7 @@ class DocReqPress extends StatelessWidget {
                               ],
                             ),
                           ),
-                          DocReqButton(title: title,),
+                          DocReqButton(title: title,price: price),
                         ],
                       ),
                     ),
@@ -127,7 +127,7 @@ class DocReqContent extends StatelessWidget {
         Container(
           padding: EdgeInsets.only(top: 10,),
           alignment: Alignment.topLeft,
-          child: Text( 'Description: \n $description \n\nRequirements: \n${requirement} \n\nPrice: $price', 
+          child: Text( 'Description: \n $description \n\nRequirements: \n${requirement} \n\nFee: $price', 
           style: TextStyle(fontSize: 15), textAlign: TextAlign.justify,),
         ),            
       ],
@@ -138,9 +138,11 @@ class DocReqContent extends StatelessWidget {
 class DocReqButton extends StatelessWidget {
   //const DocReqButton({super.key,});
   String title;
+  String price;
 
   DocReqButton({
     required this.title,
+    required this.price,
   });
 
   @override
@@ -154,7 +156,7 @@ class DocReqButton extends StatelessWidget {
         ),
         onPressed: (){
           Navigator.push(
-            context, MaterialPageRoute(builder: (BuildContext context) => DrRegister(title: title,)));
+            context, MaterialPageRoute(builder: (BuildContext context) => DrRegister(title: title,price: price)));
         },
         child: Text('Request', style: TextStyle(fontSize: 15, color: Colors.white),),
       ),

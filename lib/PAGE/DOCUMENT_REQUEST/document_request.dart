@@ -3,6 +3,7 @@ import 'package:addhills_app/SERVICES/db_service.dart';
 import 'package:flutter/material.dart';
 import 'package:addhills_app/PAGE/DOCUMENT_REQUEST/doc_req_press.dart';
 import 'package:addhills_app/PAGE/TOP_BUTTONS/top_iconbuttons.dart';
+import 'package:addhills_app/PAGE/chat_dialog.dart';
 
 class DocuPage extends StatefulWidget {
   @override
@@ -80,6 +81,20 @@ class _DocuPageState extends State<DocuPage> {
           );
         }
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return const MessageDialog();
+            },
+          );
+        },
+        backgroundColor: Color(0xFF3D3D3D),
+        foregroundColor: Colors.white,
+        child: Icon(Icons.chat),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }

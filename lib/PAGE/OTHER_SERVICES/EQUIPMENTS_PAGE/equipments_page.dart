@@ -3,6 +3,7 @@ import 'package:addhills_app/PAGE/OTHER_SERVICES/EQUIPMENTS_PAGE/equips_content.
 import 'package:addhills_app/SERVICES/db_service.dart';
 import 'package:flutter/material.dart';
 import 'package:addhills_app/PAGE/TOP_BUTTONS/top_navigationpop.dart';
+import 'package:addhills_app/PAGE/chat_dialog.dart';
 
 class EquipmentsPage extends StatefulWidget{
   @override
@@ -78,6 +79,20 @@ class _EquipmentsPageState extends State<EquipmentsPage> {
           );
         }
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return const MessageDialog();
+            },
+          );
+        },
+        backgroundColor: Color(0xFF3D3D3D),
+        foregroundColor: Colors.white,
+        child: Icon(Icons.chat),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }

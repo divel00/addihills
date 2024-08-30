@@ -3,6 +3,7 @@ import 'package:addhills_app/PAGE/OTHER_SERVICES/VENUE_PAGE/venue_content.dart';
 import 'package:addhills_app/SERVICES/db_service.dart';
 import 'package:flutter/material.dart';
 import 'package:addhills_app/PAGE/TOP_BUTTONS/top_navigationpop.dart';
+import 'package:addhills_app/PAGE/chat_dialog.dart';
 
 class VenueReservationPage extends StatelessWidget{
   VenueReservationPage({super.key});
@@ -74,6 +75,20 @@ class VenueReservationPage extends StatelessWidget{
           );
         }
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return const MessageDialog();
+            },
+          );
+        },
+        backgroundColor: Color(0xFF3D3D3D),
+        foregroundColor: Colors.white,
+        child: Icon(Icons.chat),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }

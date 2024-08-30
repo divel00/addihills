@@ -1,28 +1,39 @@
 import 'package:addhills_app/MODELS/Requests/docu_request.dart';
+import 'package:addhills_app/MODELS/Requests/equips_request_model.dart';
+import 'package:addhills_app/MODELS/Requests/venue_request_model.dart';
 import 'package:addhills_app/PAGE/DOCUMENT_REQUEST/document_request.dart';
+import 'package:addhills_app/PAGE/OTHER_SERVICES/EQUIPMENTS_PAGE/equipments_page.dart';
+import 'package:addhills_app/PAGE/OTHER_SERVICES/VENUE_PAGE/item_Map.dart';
+import 'package:addhills_app/PAGE/OTHER_SERVICES/VENUE_PAGE/venue_reservation_page.dart';
 import 'package:addhills_app/SERVICES/db_service.dart';
+import 'package:addhills_app/utils/equipmentbox.dart';
 import 'package:addhills_app/utils/methods.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:addhills_app/PAGE/TOP_BUTTONS/top_navigationpop.dart';
+import 'package:intl/intl.dart';
 
 final _formKey = GlobalKey<FormState>();
 
-class DrRegister extends StatelessWidget {
+class EquipmentsRequest extends StatelessWidget {
   var height,width;
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController contacNumController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController bdayController = TextEditingController();
-  final TextEditingController residenceController = TextEditingController();
+  final TextEditingController purposeController = TextEditingController();
+  final TextEditingController setDate = TextEditingController();
+  final TextEditingController additionalRequirementsController = TextEditingController();
+  final TextEditingController startTimeController = TextEditingController();
+  final TextEditingController endTimeController = TextEditingController();
+
+  
   
   String title;
-  String price;
 
-  DrRegister({
+  EquipmentsRequest({
     required this.title,
-    required this.price,
   });
 
   @override
@@ -68,7 +79,7 @@ class DrRegister extends StatelessWidget {
                                 bottom: 15,
                               ),
                               child: Text(
-                                'Document Request',
+                                'Equipment Request',
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 25,
@@ -87,28 +98,36 @@ class DrRegister extends StatelessWidget {
                               child: ListView(
                                 padding: EdgeInsets.zero,
                                 children: [
-                                  DrForm(
+                                  EquipsForm(
                                     nameController: nameController, 
                                     emailController: emailController, 
                                     contacNumController: contacNumController, 
                                     addressController: addressController, 
                                     bdayController: bdayController, 
-                                    residenceController: residenceController, 
-                                    title: title,)
+                                    setDateController: setDate,
+                                    purposeController: purposeController, 
+                                    additionalRequirementsController: additionalRequirementsController,
+                                    startTimeController: startTimeController, 
+                                    endTimeController: endTimeController,
+                                  )
                                 ],
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 5),
-                              child: DrSubmit(
-                                title: title, 
+                              child: EquipsSubmit(
+                                //title: title, 
                                 nameController: nameController, 
                                 emailController: emailController, 
                                 contacNumController: contacNumController, 
                                 addressController: addressController, 
                                 bdayController: bdayController,
-                                residenceController: residenceController, 
-                                price: price,),
+                                setDateController: setDate,
+                                purposeController: purposeController,
+                                additionalRequirementsController: additionalRequirementsController, 
+                                startTimeController: startTimeController, 
+                                endTimeController: endTimeController,
+                              ),
                             )
                           ],
                         ),
@@ -125,38 +144,44 @@ class DrRegister extends StatelessWidget {
   }
 }
 
-class DrForm extends StatefulWidget {
+class EquipsForm extends StatefulWidget {
   final TextEditingController nameController;
   final TextEditingController emailController;
   final TextEditingController contacNumController;
   final TextEditingController addressController;
   final TextEditingController bdayController;
-  final TextEditingController residenceController;
-  final String title;
+  final TextEditingController setDateController;
+  final TextEditingController purposeController;
+  final TextEditingController additionalRequirementsController;
+  final TextEditingController startTimeController;
+  final TextEditingController endTimeController;
 
-  DrForm({
-    required this.title,
+  EquipsForm({
     required this.nameController,
     required this.emailController,
     required this.contacNumController,
     required this.addressController,
     required this.bdayController,
-    required this.residenceController,
+    required this.setDateController,
+    required this.purposeController,
+    required this.additionalRequirementsController,
+    required this.startTimeController,
+    required this.endTimeController,
   });
 
   @override
-  State<DrForm> createState() => _DrFormState();
+  State<EquipsForm> createState() => _EquipsFormState();
 }
 
-class _DrFormState extends State<DrForm> {
+class _EquipsFormState extends State<EquipsForm> {
   @override
   Widget build(BuildContext context) {
 
     return Column(
       children: [
-        Container(
-          alignment: Alignment.topCenter,
-          child: Text('${widget.title}', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black))),
+        // Container(
+        //   alignment: Alignment.topCenter,
+        //   child: Text('${widget.title}', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black))),
         Container(
           padding: EdgeInsets.only(top: 8),
           alignment: Alignment.topLeft,
@@ -175,16 +200,49 @@ class _DrFormState extends State<DrForm> {
               headerForTfield(text: 'Birthday',),
               buildBirthday(),   
               headerForTfield(text: 'Address',),
-              buildAddress(),    
-              headerForTfield(text: 'Years of Residence',),
-              buildResidence(),  
+              buildAddress(), 
+              headerForTfield(text: 'Purpose',),
+              buildPurpose(),    
+              SizedBox(height: 30),   
+                // Text(
+                //   'Additional Requests',
+                //   style: TextStyle(
+                //     color: Colors.black54,
+                //   ),
+                // ),
+                Divider(
+                  color: Colors.black54
+                ),
+              headerForTfield(text: 'Reservation Date',),
+              buildSetDate(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    width: 150,
+                    child: Column(
+                      children: [
+                        headerForTfield(text: 'Start Time'),
+                        buildStartTime(),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: 150,
+                    child: Column(
+                      children: [
+                        headerForTfield(text: 'End Time'),
+                        buildEndTime(),
+                      ],
+                    ),
+                  )
+                ],
+              ), 
             ],
           ),
-        ),   
-          
-         
-        // headerForTfield(text: 'Purpose',),
-        // buildPurpose(),           
+        ),
+        headerForTfield(text: 'Equipments'),
+        EquipmentBox(equipmentController: widget.additionalRequirementsController)
       ],
     );
   }
@@ -282,12 +340,11 @@ class _DrFormState extends State<DrForm> {
     },
   );
 
-  Widget buildResidence() => TextField(
-    controller: widget.residenceController,
+  Widget buildSetDate() => TextField(
+    controller: widget.setDateController,
     style: TextStyle(fontSize: 15),
     decoration: InputDecoration(
-      hintText: 'Taon ng Paninirahan',
-      helperText: 'Must have been a resident for at least 6 months.\n(The specific day does not need to be exact.)',
+      hintText: 'Araw ng pagreserba',
       border: OutlineInputBorder(),
       //isDense: true,
       contentPadding: EdgeInsets.all(8),
@@ -297,9 +354,85 @@ class _DrFormState extends State<DrForm> {
     //keyboardType: TextInputType.datetime,
     readOnly: true,
     onTap: () {
-      _selectDate(context,widget.residenceController);
+      _selectDate(context,widget.setDateController);
     },
   );
+
+  Widget buildStartTime() => TextField(
+    controller: widget.startTimeController,
+    style: TextStyle(fontSize: 15),
+    decoration: InputDecoration(
+      //hintText: 'Araw ng pagreserba',
+      border: OutlineInputBorder(),
+      //isDense: true,
+      contentPadding: EdgeInsets.all(8),
+      suffixIcon: Icon(Icons.access_time),
+    ),
+    textInputAction: TextInputAction.done,
+    //keyboardType: TextInputType.datetime,
+    readOnly: true,
+    onTap: () {
+      _selectTime(context, widget.startTimeController);
+    },
+  );
+
+  Widget buildEndTime() => TextField(
+    controller: widget.endTimeController,
+    style: TextStyle(fontSize: 15),
+    decoration: InputDecoration(
+      //hintText: 'Araw ng pagreserba',
+      border: OutlineInputBorder(),
+      //isDense: true,
+      contentPadding: EdgeInsets.all(8),
+      suffixIcon: Icon(Icons.access_time),
+    ),
+    textInputAction: TextInputAction.done,
+    //keyboardType: TextInputType.datetime,
+    readOnly: true,
+    onTap: () {
+      _selectTime(context, widget.endTimeController);
+    },
+  );
+
+  Widget buildPurpose() => TextField(
+    controller: widget.purposeController,
+    style: TextStyle(fontSize: 15),
+    decoration: InputDecoration(
+      hintText: 'Layunin',
+      border: OutlineInputBorder(),
+      isDense: true,
+      contentPadding: EdgeInsets.all(8),
+    ),
+    textInputAction: TextInputAction.done,
+    //keyboardType: TextInputType.streetAddress,
+  );
+
+  Future<void> _selectTime(BuildContext context, TextEditingController controller) async {
+    TimeOfDay? _picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+      initialEntryMode: TimePickerEntryMode.input,
+    );
+
+    if (_picked != null) {
+      // Convert TimeOfDay to DateTime
+      final now = DateTime.now();
+      final selectedTime = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        _picked.hour,
+        _picked.minute,
+      );
+
+      // Format the DateTime to 'HH:mm a'
+      final formattedTime = DateFormat('h:mm a').format(selectedTime);
+
+      setState(() {
+        controller.text = formattedTime;
+      });
+    }
+  }
 
   Future<void> _selectDate(BuildContext context, TextEditingController controller) async{
     DateTime? _picked = await showDatePicker(
@@ -314,7 +447,6 @@ class _DrFormState extends State<DrForm> {
         controller.text = _picked.toString().split(' ')[0];
       });
     }
-
   }
 }
 
@@ -331,25 +463,30 @@ class headerForTfield extends StatelessWidget {
   }
 }
 
-class DrSubmit extends StatelessWidget {
+class EquipsSubmit extends StatelessWidget {
   final TextEditingController nameController;
   final TextEditingController emailController;
   final TextEditingController contacNumController;
   final TextEditingController addressController;
   final TextEditingController bdayController;
-  final TextEditingController residenceController;
-  final String title;
-  final String price;
+  final TextEditingController setDateController;
+  final TextEditingController purposeController;
+  final TextEditingController additionalRequirementsController;
+  final TextEditingController startTimeController;
+  final TextEditingController endTimeController;
+  
 
-  DrSubmit({
-    required this.title,
-    required this.price,
+  EquipsSubmit({
     required this.nameController,
     required this.emailController,
     required this.contacNumController,
     required this.addressController,
     required this.bdayController,
-    required this.residenceController,
+    required this.setDateController,
+    required this.purposeController,
+    required this.additionalRequirementsController,
+    required this.startTimeController,
+    required this.endTimeController,
   });
 
   final DbService _dbService = DbService();
@@ -364,9 +501,9 @@ class DrSubmit extends StatelessWidget {
           padding: EdgeInsets.only(left: 80, right: 80, top: 10, bottom: 10,),
         ),
         onPressed: () async{
-          if (nameController.text.isEmpty || emailController.text.isEmpty || residenceController.text.isEmpty ||
+          if (nameController.text.isEmpty || emailController.text.isEmpty || setDateController.text.isEmpty ||
           contacNumController.text.isEmpty || addressController.text.isEmpty || bdayController.text.isEmpty || 
-          !_formKey.currentState!.validate()){
+          purposeController.text.isEmpty || !_formKey.currentState!.validate()){
             _showDialog(context, 'Error', 'Please ensure all fields are completed and valid.');
           }
           else if(_formKey.currentState!.validate()){
@@ -376,6 +513,11 @@ class DrSubmit extends StatelessWidget {
         child: Text('Submit', style: TextStyle(fontSize: 15, color: Colors.white),),
       ),
     );
+  }
+
+  List<String> parseEquipments(String equipmentsString) {
+    // Split the formatted string back into a list of strings
+    return equipmentsString.split(', ').map((item) => item.trim()).toList();
   }
 
   Future<dynamic> _showDialog(BuildContext context, String title, String content) {
@@ -411,36 +553,40 @@ class DrSubmit extends StatelessWidget {
     bool confirmed = await showConfirmationDialog(context);
 
     if (confirmed) {
-      DocuRequest docsreq = DocuRequest(
-        document_title: title,
+      EquipsRequestModel equipreq = EquipsRequestModel(
         requester_name: nameController.text, 
         address: addressController.text, 
         birthday: bdayController.text, 
         request_status: "Pending", 
         user_email: emailController.text,
         date_requested: Timestamp.now(),
-        pickup_date: addtimestamp(), 
-        years_of_residence: calculateYearsAndMonthsOfResidence(residenceController.text), 
-        user_age: calculateAge(bdayController.text), 
+        selected_date: setDateController.text,
+        user_age: calculateAge(bdayController.text),
+        purpose: purposeController.text, 
         contact_number: contacNumController.text, 
-        price: price,
+        equipments: parseEquipments(additionalRequirementsController.text), 
+        selected_time: '${startTimeController.text} - ${endTimeController.text}',
       );
-      _dbService.addDocsReq(generateTimestampBasedId(),docsreq);
+      _dbService.addEquipReq(generateTimestampBasedId(), equipreq);
       
       nameController.clear();
       emailController.clear();
       contacNumController.clear();
       addressController.clear();
       bdayController.clear();
-      residenceController.clear();
+      setDateController.clear();
+      purposeController.clear();
+      additionalRequirementsController.clear();
+      startTimeController.clear();
+      endTimeController.clear();
 
       await _showDialog(
         context, 
         'Success', 
         'Your request has been submitted. An email will be sent to you once your request is approved.'
       );
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => DocuPage()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => EquipmentsPage()));
     }
   }
-  
+
 }
