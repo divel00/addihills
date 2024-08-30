@@ -564,7 +564,7 @@ class VenueSubmit extends StatelessWidget {
         purpose: purposeController.text, 
         contact_number: contacNumController.text, 
         additional_equipments: parseEquipments(additionalRequirementsController.text), 
-        selected_time: '',
+        selected_time: '${startTimeController.text} - ${endTimeController.text}',
       );
       _dbService.addVenueReq(generateTimestampBasedId(), venuereq);
       

@@ -18,9 +18,11 @@ class DrRegister extends StatelessWidget {
   final TextEditingController residenceController = TextEditingController();
   
   String title;
+  String price;
 
   DrRegister({
     required this.title,
+    required this.price,
   });
 
   @override
@@ -105,7 +107,8 @@ class DrRegister extends StatelessWidget {
                                 contacNumController: contacNumController, 
                                 addressController: addressController, 
                                 bdayController: bdayController,
-                                residenceController: residenceController),
+                                residenceController: residenceController, 
+                                price: price,),
                             )
                           ],
                         ),
@@ -336,9 +339,11 @@ class DrSubmit extends StatelessWidget {
   final TextEditingController bdayController;
   final TextEditingController residenceController;
   final String title;
+  final String price;
 
   DrSubmit({
     required this.title,
+    required this.price,
     required this.nameController,
     required this.emailController,
     required this.contacNumController,
@@ -411,13 +416,14 @@ class DrSubmit extends StatelessWidget {
         requester_name: nameController.text, 
         address: addressController.text, 
         birthday: bdayController.text, 
-        request_status: "pending", 
+        request_status: "Pending", 
         user_email: emailController.text,
         date_requested: Timestamp.now(),
         pickup_date: addtimestamp(), 
         years_of_residence: calculateYearsAndMonthsOfResidence(residenceController.text), 
         user_age: calculateAge(bdayController.text), 
-        contact_number: contacNumController.text,
+        contact_number: contacNumController.text, 
+        price: price,
       );
       _dbService.addDocsReq(generateTimestampBasedId(),docsreq);
       

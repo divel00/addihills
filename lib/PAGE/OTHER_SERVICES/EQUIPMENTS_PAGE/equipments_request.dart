@@ -557,7 +557,7 @@ class EquipsSubmit extends StatelessWidget {
         requester_name: nameController.text, 
         address: addressController.text, 
         birthday: bdayController.text, 
-        request_status: "pending", 
+        request_status: "Pending", 
         user_email: emailController.text,
         date_requested: Timestamp.now(),
         selected_date: setDateController.text,
