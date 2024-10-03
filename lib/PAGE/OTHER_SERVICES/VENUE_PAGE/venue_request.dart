@@ -1,6 +1,7 @@
 import 'package:addhills_app/MODELS/Requests/venue_request_model.dart';
 import 'package:addhills_app/PAGE/OTHER_SERVICES/VENUE_PAGE/venue_reservation_page.dart';
 import 'package:addhills_app/SERVICES/db_service.dart';
+import 'package:addhills_app/utils/calendar_datepicker.dart';
 import 'package:addhills_app/utils/equipmentbox.dart';
 import 'package:addhills_app/utils/methods.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,11 +13,6 @@ final _formKey = GlobalKey<FormState>();
 
 class VenueRequest extends StatelessWidget {
   var height,width;
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController contacNumController = TextEditingController();
-  final TextEditingController addressController = TextEditingController();
-  final TextEditingController bdayController = TextEditingController();
   final TextEditingController purposeController = TextEditingController();
   final TextEditingController setDate = TextEditingController();
   final TextEditingController additionalRequirementsController = TextEditingController();
@@ -92,11 +88,6 @@ class VenueRequest extends StatelessWidget {
                                 padding: EdgeInsets.zero,
                                 children: [
                                   VenueForm(
-                                    nameController: nameController, 
-                                    emailController: emailController, 
-                                    contacNumController: contacNumController, 
-                                    addressController: addressController, 
-                                    bdayController: bdayController, 
                                     setDateController: setDate, 
                                     title: title,
                                     purposeController: purposeController, 
@@ -110,12 +101,7 @@ class VenueRequest extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.only(top: 5),
                               child: VenueSubmit(
-                                title: title, 
-                                nameController: nameController, 
-                                emailController: emailController, 
-                                contacNumController: contacNumController, 
-                                addressController: addressController, 
-                                bdayController: bdayController,
+                                title: title,
                                 setDateController: setDate,
                                 purposeController: purposeController,
                                 additionalRequirementsController: additionalRequirementsController,
@@ -139,11 +125,7 @@ class VenueRequest extends StatelessWidget {
 }
 
 class VenueForm extends StatefulWidget {
-  final TextEditingController nameController;
-  final TextEditingController emailController;
-  final TextEditingController contacNumController;
-  final TextEditingController addressController;
-  final TextEditingController bdayController;
+  
   final TextEditingController setDateController;
   final TextEditingController purposeController;
   final TextEditingController additionalRequirementsController;
@@ -153,11 +135,6 @@ class VenueForm extends StatefulWidget {
 
   VenueForm({
     required this.title,
-    required this.nameController,
-    required this.emailController,
-    required this.contacNumController,
-    required this.addressController,
-    required this.bdayController,
     required this.setDateController,
     required this.purposeController,
     required this.additionalRequirementsController,
@@ -187,16 +164,16 @@ class _VenueFormState extends State<VenueForm> {
           key: _formKey,
           child: Column(
             children: [
-              headerForTfield(text: 'Full Name',),
-              buildName(),
-              headerForTfield(text: 'Email',),
-              buildEmail(),
-              headerForTfield(text: 'Contact Number',),
-              buildContact(),
-              headerForTfield(text: 'Birthday',),
-              buildBirthday(),   
-              headerForTfield(text: 'Address',),
-              buildAddress(), 
+              // headerForTfield(text: 'Full Name',),
+              // buildName(),
+              // headerForTfield(text: 'Email',),
+              // buildEmail(),
+              // headerForTfield(text: 'Contact Number',),
+              // buildContact(),
+              // headerForTfield(text: 'Birthday',),
+              // buildBirthday(),   
+              // headerForTfield(text: 'Address',),
+              // buildAddress(), 
               headerForTfield(text: 'Purpose',),
               buildPurpose(),    
               headerForTfield(text: 'Reservation Date',),
@@ -238,103 +215,103 @@ class _VenueFormState extends State<VenueForm> {
           color: Colors.black54
         ),
         headerForTfield(text: 'Equipments'),
-        EquipmentBox(equipmentController: widget.additionalRequirementsController)
+        //EquipmentBox(equipmentController: widget.additionalRequirementsController)
       ],
     );
   }
 
-  Widget buildName() => TextField(
-    controller: widget.nameController,
-    style: TextStyle(fontSize: 15),
-    decoration: InputDecoration(
-      hintText: 'Buong Pangalan',
-      border: OutlineInputBorder(),
-      isDense: true,
-      contentPadding: EdgeInsets.all(8),
-    ),
-    textInputAction: TextInputAction.done,
-    keyboardType: TextInputType.name,
-  );
+  // Widget buildName() => TextField(
+  //   controller: widget.nameController,
+  //   style: TextStyle(fontSize: 15),
+  //   decoration: InputDecoration(
+  //     hintText: 'Buong Pangalan',
+  //     border: OutlineInputBorder(),
+  //     isDense: true,
+  //     contentPadding: EdgeInsets.all(8),
+  //   ),
+  //   textInputAction: TextInputAction.done,
+  //   keyboardType: TextInputType.name,
+  // );
 
-  Widget buildEmail() => TextFormField(
-    controller: widget.emailController,
-    style: TextStyle(fontSize: 15),
-    decoration: InputDecoration(
-      hintText: 'Email',
-      border: OutlineInputBorder(),
-      isDense: true,
-      contentPadding: EdgeInsets.all(8),
-    ),
-    textInputAction: TextInputAction.done,
-    keyboardType: TextInputType.emailAddress, // Use email address keyboard type for better UX
-    validator: (value) {
-      // Define the regular expression for email validation
-      final emailRegExp = RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
-      // Check if the value is null or does not match the regular expression
-      if (value == null || !emailRegExp.hasMatch(value)) {
-        // Return an error message if invalid
-        return 'Invalid email format';
-      }
-      // Return null if valid
-      return null;
-    },
-  );
-
-
-  Widget buildContact() => TextFormField(
-    controller: widget.contacNumController,
-    style: TextStyle(fontSize: 15),
-    decoration: InputDecoration(
-      hintText: 'Numero ng Telepono', // Placeholder text
-      border: OutlineInputBorder(),
-      isDense: true,
-      contentPadding: EdgeInsets.all(8),
-    ),
-    textInputAction: TextInputAction.done,
-    keyboardType: TextInputType.phone, // Use phone keyboard type for better UX
-    validator: (value) {
-      // Define the regular expression for phone number validation
-      final phoneRegExp = RegExp(r"^((\+63)|0)[9][0-9]{9}$");
-      // Check if the value is null or does not match the regular expression
-      if (value == null || !phoneRegExp.hasMatch(value)) {
-        return 'Enter a valid phone number'; // Error message
-      }
-      // Return null if valid
-      return null;
-    },
-  );
+  // Widget buildEmail() => TextFormField(
+  //   controller: widget.emailController,
+  //   style: TextStyle(fontSize: 15),
+  //   decoration: InputDecoration(
+  //     hintText: 'Email',
+  //     border: OutlineInputBorder(),
+  //     isDense: true,
+  //     contentPadding: EdgeInsets.all(8),
+  //   ),
+  //   textInputAction: TextInputAction.done,
+  //   keyboardType: TextInputType.emailAddress, // Use email address keyboard type for better UX
+  //   validator: (value) {
+  //     // Define the regular expression for email validation
+  //     final emailRegExp = RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
+  //     // Check if the value is null or does not match the regular expression
+  //     if (value == null || !emailRegExp.hasMatch(value)) {
+  //       // Return an error message if invalid
+  //       return 'Invalid email format';
+  //     }
+  //     // Return null if valid
+  //     return null;
+  //   },
+  // );
 
 
-  Widget buildAddress() => TextField(
-    controller: widget.addressController,
-    style: TextStyle(fontSize: 15),
-    decoration: InputDecoration(
-      hintText: 'Tirahan',
-      border: OutlineInputBorder(),
-      isDense: true,
-      contentPadding: EdgeInsets.all(8),
-    ),
-    textInputAction: TextInputAction.done,
-    keyboardType: TextInputType.streetAddress,
-  );
+  // Widget buildContact() => TextFormField(
+  //   controller: widget.contacNumController,
+  //   style: TextStyle(fontSize: 15),
+  //   decoration: InputDecoration(
+  //     hintText: 'Numero ng Telepono', // Placeholder text
+  //     border: OutlineInputBorder(),
+  //     isDense: true,
+  //     contentPadding: EdgeInsets.all(8),
+  //   ),
+  //   textInputAction: TextInputAction.done,
+  //   keyboardType: TextInputType.phone, // Use phone keyboard type for better UX
+  //   validator: (value) {
+  //     // Define the regular expression for phone number validation
+  //     final phoneRegExp = RegExp(r"^((\+63)|0)[9][0-9]{9}$");
+  //     // Check if the value is null or does not match the regular expression
+  //     if (value == null || !phoneRegExp.hasMatch(value)) {
+  //       return 'Enter a valid phone number'; // Error message
+  //     }
+  //     // Return null if valid
+  //     return null;
+  //   },
+  // );
 
-  Widget buildBirthday() => TextField(
-    controller: widget.bdayController,
-    style: TextStyle(fontSize: 15),
-    decoration: InputDecoration(
-      hintText: 'Kaarawan',
-      border: OutlineInputBorder(),
-      //isDense: true,
-      contentPadding: EdgeInsets.all(8),
-      suffixIcon: Icon(Icons.calendar_month),
-    ),
-    textInputAction: TextInputAction.done,
-    //keyboardType: TextInputType.datetime,
-    readOnly: true,
-    onTap: () {
-      _selectDate(context,widget.bdayController);
-    },
-  );
+
+  // Widget buildAddress() => TextField(
+  //   controller: widget.addressController,
+  //   style: TextStyle(fontSize: 15),
+  //   decoration: InputDecoration(
+  //     hintText: 'Tirahan',
+  //     border: OutlineInputBorder(),
+  //     isDense: true,
+  //     contentPadding: EdgeInsets.all(8),
+  //   ),
+  //   textInputAction: TextInputAction.done,
+  //   keyboardType: TextInputType.streetAddress,
+  // );
+
+  // Widget buildBirthday() => TextField(
+  //   controller: widget.bdayController,
+  //   style: TextStyle(fontSize: 15),
+  //   decoration: InputDecoration(
+  //     hintText: 'Kaarawan',
+  //     border: OutlineInputBorder(),
+  //     //isDense: true,
+  //     contentPadding: EdgeInsets.all(8),
+  //     suffixIcon: Icon(Icons.calendar_month),
+  //   ),
+  //   textInputAction: TextInputAction.done,
+  //   //keyboardType: TextInputType.datetime,
+  //   readOnly: true,
+  //   onTap: () {
+  //     _selectDate(context,widget.bdayController);
+  //   },
+  // );
 
   Widget buildSetDate() => TextField(
     controller: widget.setDateController,
@@ -342,17 +319,29 @@ class _VenueFormState extends State<VenueForm> {
     decoration: InputDecoration(
       hintText: 'Araw ng pagreserba',
       border: OutlineInputBorder(),
-      //isDense: true,
       contentPadding: EdgeInsets.all(8),
       suffixIcon: Icon(Icons.calendar_month),
     ),
     textInputAction: TextInputAction.done,
-    //keyboardType: TextInputType.datetime,
     readOnly: true,
-    onTap: () {
-      _selectDate(context,widget.setDateController);
+    onTap: () async {
+      // Navigate to VenueCalendarPage and wait for the selected date
+      final selectedDate = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => VenueCalendarPage(venueName: widget.title),
+        ),
+      );
+
+      // Check if a date was selected and update the TextField
+      if (selectedDate != null) {
+        // Format the date if necessary (e.g., 'yyyy-MM-dd')
+        final formattedDate = '${selectedDate.year}-${selectedDate.month}-${selectedDate.day}';
+        widget.setDateController.text = formattedDate;  // Update the TextField
+      }
     },
   );
+
 
   Widget buildStartTime() => TextField(
     controller: widget.startTimeController,
@@ -461,11 +450,6 @@ class headerForTfield extends StatelessWidget {
 }
 
 class VenueSubmit extends StatelessWidget {
-  final TextEditingController nameController;
-  final TextEditingController emailController;
-  final TextEditingController contacNumController;
-  final TextEditingController addressController;
-  final TextEditingController bdayController;
   final TextEditingController setDateController;
   final TextEditingController purposeController;
   final TextEditingController additionalRequirementsController;
@@ -475,11 +459,6 @@ class VenueSubmit extends StatelessWidget {
 
   VenueSubmit({
     required this.title,
-    required this.nameController,
-    required this.emailController,
-    required this.contacNumController,
-    required this.addressController,
-    required this.bdayController,
     required this.setDateController,
     required this.purposeController,
     required this.additionalRequirementsController,
@@ -491,26 +470,50 @@ class VenueSubmit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.bottomCenter,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color.fromARGB(255, 243, 109, 99),
-          padding: EdgeInsets.only(left: 80, right: 80, top: 10, bottom: 10,),
-        ),
-        onPressed: () async{
-          if (nameController.text.isEmpty || emailController.text.isEmpty || setDateController.text.isEmpty ||
-          contacNumController.text.isEmpty || addressController.text.isEmpty || bdayController.text.isEmpty || 
-          purposeController.text.isEmpty || startTimeController.text.isEmpty ||endTimeController.text.isEmpty ||
-          !_formKey.currentState!.validate()){
-            _showDialog(context, 'Error', 'Please ensure all fields are completed and valid.');
+    return FutureBuilder(
+      future: _dbService.getUsersInfo(getCurrentUserEmail() ?? 'No user is logged in.'), 
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
           }
-          else if(_formKey.currentState!.validate()){
-            submitRequest(context);
+
+          if (snapshot.hasError) {
+            return Center(child: Text("Error: ${snapshot.error}"));
           }
-        },
-        child: Text('Submit', style: TextStyle(fontSize: 15, color: Colors.white),),
-      ),
+
+          if (!snapshot.hasData || !snapshot.data!.exists) {
+            return Center(child: Text("User not found."));
+          }
+
+          final user = snapshot.data!.data()!; // Get the UsersInfo object
+          
+        return Container(
+          alignment: Alignment.bottomCenter,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color.fromARGB(255, 243, 109, 99),
+              padding: EdgeInsets.only(left: 80, right: 80, top: 10, bottom: 10,),
+            ),
+            onPressed: () async{
+              if (setDateController.text.isEmpty ||purposeController.text.isEmpty ||
+               startTimeController.text.isEmpty ||endTimeController.text.isEmpty ||
+              !_formKey.currentState!.validate()){
+                _showDialog(context, 'Error', 'Please ensure all fields are completed and valid.');
+              }
+              else if(_formKey.currentState!.validate()){
+                submitRequest(
+                  context, 
+                  '${user.firstName} ${user.lastName}', 
+                  '${user.address}', 
+                  '${user.birthday}', 
+                  '${user.userEmail}', 
+                  '${user.phoneNumber}');
+              }
+            },
+            child: Text('Submit', style: TextStyle(fontSize: 15, color: Colors.white),),
+          ),
+        );
+      },
     );
   }
 
@@ -548,32 +551,29 @@ class VenueSubmit extends StatelessWidget {
     );
   }
 
-  void submitRequest(BuildContext context) async {
+  void submitRequest(
+    BuildContext context, String userName, String address, String bday, String userEmail, String contactNumber,) async {
     bool confirmed = await showConfirmationDialog(context);
 
     if (confirmed) {
       VenueRequestModel venuereq = VenueRequestModel(
         venue_name: title,
-        requester_name: nameController.text, 
-        address: addressController.text, 
-        birthday: bdayController.text, 
+        requester_name: userName, 
+        address: address, 
+        birthday: bday, 
         request_status: "Pending", 
-        user_email: emailController.text,
+        user_email: userEmail,
         date_requested: Timestamp.now(),
         selected_date: setDateController.text,
-        user_age: calculateAge(bdayController.text),
+        user_age: calculateAge(bday),
         purpose: purposeController.text, 
-        contact_number: contacNumController.text, 
+        contact_number: contactNumber, 
         additional_equipments: parseEquipments(additionalRequirementsController.text), 
-        selected_time: '${startTimeController.text} - ${endTimeController.text}',
+        start_time: startTimeController.text,
+        end_time: endTimeController.text,
       );
       _dbService.addVenueReq(generateTimestampBasedId(), venuereq);
       
-      nameController.clear();
-      emailController.clear();
-      contacNumController.clear();
-      addressController.clear();
-      bdayController.clear();
       setDateController.clear();
       purposeController.clear();
       additionalRequirementsController.clear();
@@ -585,7 +585,7 @@ class VenueSubmit extends StatelessWidget {
         'Success', 
         'Your request has been submitted. An email will be sent to you once your request is approved.'
       );
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => VenueReservationPage()));
+      Navigator.pop(context);
     }
   }
 

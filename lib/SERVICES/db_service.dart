@@ -31,7 +31,10 @@ class DbService {
   late final CollectionReference<EquipsRequestModel> _equipReqRef;
   late final CollectionReference<UsersInfo> _usersInfoRef;
 
+  CollectionReference<VenueRequestModel> get venueReqRef => _venueReqRef;
+
   DbService() {
+    
     _docsRef = _firestore.collection(DOCS_COLLECTION_REF).withConverter<Docs>(
       fromFirestore: (snapshots, _) => Docs.fromJson(snapshots.data()!),
       toFirestore: (docs, _) => docs.toJson(),
@@ -90,10 +93,24 @@ class DbService {
     return _venueRef.snapshots();
   }
 
+   Stream<QuerySnapshot<VenueRequestModel>> getVenueReqs() {
+    return _venueReqRef.where('request_status', isEqualTo: 'Approved').snapshots();
+  }
+
   Stream<QuerySnapshot<Announcements>> getAnnouncements() {
     return _announcementRef.snapshots();
   }
   
+  Future<DocumentSnapshot<UsersInfo>> getUsersInfo(String uid) async {
+    try {
+      // Fetch the specific document by UID with automatic conversion
+      DocumentSnapshot<UsersInfo> userInfo = await _usersInfoRef.doc(uid).get();
+      return userInfo; 
+    } catch (e) {
+      print("Error fetching user info: $e");
+      rethrow; // Optionally rethrow the error
+    }
+  }
 
   // Fetch equipment
   Stream<List<Equipment>> getEquipments() {
@@ -102,12 +119,14 @@ class DbService {
         final equip = doc.data();
         return Equipment(
           id: doc.id,
-          name: equip.itemName,
+          name: equip.itemName, 
+          available: equip.available,
         );
       }).toList();
     });
   }
 
+  // create || add
   void addDocsReq(String id, DocuRequest docsreq) async {
     await _docsReqRef.doc(id).set(docsreq);
   }
@@ -123,5 +142,17 @@ class DbService {
   void addUserInfo(String id, UsersInfo userinfo) async {
     await _usersInfoRef.doc(id).set(userinfo);
   }
+
+  // update
+  void updUserInfo(String id, UsersInfo userinfo) async {
+    try {
+      await _usersInfoRef.doc(id).update(userinfo.toJson());
+      //print("User info updated successfully");
+    } catch (e) {
+      print("Error updating user info: $e");
+    }
+  }
+
 }
+
 

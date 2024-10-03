@@ -1,38 +1,44 @@
 import 'package:addhills_app/SERVICES/db_service.dart';
 import 'package:flutter/material.dart';
+import 'package:input_quantity/input_quantity.dart';
+
 
 class Equipment {
   final String id;
   final String name;
+  final int available; // Add available field
 
-  Equipment({required this.id, required this.name});
+  Equipment({required this.id, required this.name, required this.available});
 
   Map<String, dynamic> toJson() => {
     'id': id,
     'name': name,
+    'available': available, // Include available in JSON
   };
 
   static Equipment fromJson(Map<String, dynamic> json) {
     return Equipment(
       id: json['id'] as String,
       name: json['name'] as String,
+      available: json['available'] as int, // Parse available from JSON
     );
   }
 }
 
+
 // Widget for Equipment Slot
 class EquipmentSlot extends StatefulWidget {
-  final List<Equipment> equipmentList;
   final Equipment? selectedEquipment;
   final int quantity;
+  final int availableQuantity; // New parameter
   final ValueChanged<Equipment?> onEquipmentChanged;
   final ValueChanged<int> onQuantityChanged;
   final VoidCallback onDelete;
 
   EquipmentSlot({
-    required this.equipmentList,
     required this.selectedEquipment,
     required this.quantity,
+    required this.availableQuantity, // Accept available quantity
     required this.onEquipmentChanged,
     required this.onQuantityChanged,
     required this.onDelete,
@@ -43,28 +49,6 @@ class EquipmentSlot extends StatefulWidget {
 }
 
 class _EquipmentSlotState extends State<EquipmentSlot> {
-  late final TextEditingController _quantityController;
-
-  @override
-  void initState() {
-    super.initState();
-    _quantityController = TextEditingController(text: widget.quantity.toString());
-  }
-
-  @override
-  void didUpdateWidget(EquipmentSlot oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.quantity != widget.quantity) {
-      _quantityController.text = widget.quantity.toString();
-    }
-  }
-
-  @override
-  void dispose() {
-    _quantityController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -74,33 +58,28 @@ class _EquipmentSlotState extends State<EquipmentSlot> {
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: SizedBox(
             width: 110,
-            child: DropdownButton<Equipment>(
-              value: widget.selectedEquipment,
-              onChanged: widget.onEquipmentChanged,
-              hint: Text('Equipment'),
-              items: widget.equipmentList.map((Equipment equipment) {
-                return DropdownMenuItem<Equipment>(
-                  value: equipment,
-                  child: Text(equipment.name),
-                );
-              }).toList(),
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              decoration: BoxDecoration(
+                border: Border.all(),
+              ),
+              child: Text(widget.selectedEquipment?.name ?? 'Select Equipment'),
             ),
           ),
         ),
         SizedBox(
-          width: 50,
-          child: TextField(
-            controller: _quantityController,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              isDense: true,
-              contentPadding: EdgeInsets.all(8),
-            ),
-            onChanged: (value) {
-              final intQuantity = int.tryParse(value) ?? 0;
-              widget.onQuantityChanged(intQuantity);
+          width: 80,
+          child: InputQty.int(
+            maxVal: widget.availableQuantity, // Set max value to available quantity
+            initVal: widget.quantity,
+            minVal: 0,
+            steps: 1,
+            onQtyChanged: (val) {
+              widget.onQuantityChanged(val);
             },
+            decoration: const QtyDecorationProps(
+              qtyStyle: QtyStyle.classic,
+            ),
           ),
         ),
         IconButton(
@@ -115,6 +94,9 @@ class _EquipmentSlotState extends State<EquipmentSlot> {
 
 // Main Screen
 class EquipmentBorrowerSystem extends StatefulWidget {
+  final Function(String) onSelectionChanged; // Callback to pass data back
+  EquipmentBorrowerSystem({required this.onSelectionChanged});
+
   @override
   _EquipmentBorrowerSystemState createState() => _EquipmentBorrowerSystemState();
 }
@@ -122,9 +104,8 @@ class EquipmentBorrowerSystem extends StatefulWidget {
 class _EquipmentBorrowerSystemState extends State<EquipmentBorrowerSystem> {
   final DbService _dbService = DbService();
   List<Equipment> equipmentList = [];
-  List<Map<String, dynamic>> slots = [
-    {'equipment': null, 'quantity': 0},
-  ];
+  List<Map<String, dynamic>> slots = [];
+  String selectedEquipmentsString = '';
 
   @override
   void initState() {
@@ -141,34 +122,76 @@ class _EquipmentBorrowerSystemState extends State<EquipmentBorrowerSystem> {
   }
 
   void addSlot() {
-    setState(() {
-      slots.add({'equipment': null, 'quantity': 0});
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Select Equipment'),
+          content: Container(
+            width: double.maxFinite,
+            child: ListView.builder(
+              itemCount: equipmentList.length,
+              itemBuilder: (context, index) {
+                Equipment equipment = equipmentList[index];
+                if (slots.any((slot) => slot['equipment'] == equipment)) return Container();
+
+                return ListTile(
+                  title: Text(equipment.name),
+                  onTap: () {
+                    Navigator.of(context).pop(equipment);
+                  },
+                );
+              },
+            ),
+          ),
+        );
+      },
+    ).then((selected) {
+      if (selected != null && selected is Equipment) {
+        setState(() {
+          slots.add({'equipment': selected, 'quantity': 0, 'available': selected.available}); // Store available quantity
+          _updateSelectedEquipmentsString();
+        });
+      }
     });
   }
+
+
+
 
   void updateSlot(int index, Equipment? equipment, int quantity) {
     setState(() {
       slots[index]['equipment'] = equipment;
       slots[index]['quantity'] = quantity;
+      _updateSelectedEquipmentsString();
     });
   }
 
   void deleteSlot(int index) {
     setState(() {
       slots.removeAt(index);
+      _updateSelectedEquipmentsString();
     });
   }
 
-  void submit() {
-    List<Map<String, dynamic>> submittedData = slots.map((slot) {
-      return {
-        'equipment': (slot['equipment'] as Equipment?)?.name ?? 'None',
-        'quantity': slot['quantity'],
-      };
+  void _updateSelectedEquipmentsString() {
+    final List<String> selectedList = slots.map((slot) {
+      return '${slot['equipment']?.name ?? 'None'} (${slot['quantity']})';
     }).toList();
-
-    Navigator.of(context).pop(submittedData);
+    selectedEquipmentsString = selectedList.join(', ');
+    widget.onSelectionChanged(selectedEquipmentsString); // Pass the updated string back
   }
+
+  // void submit() {
+  //   List<Map<String, dynamic>> submittedData = slots.map((slot) {
+  //     return {
+  //       'equipment': (slot['equipment'] as Equipment?)?.name ?? 'None',
+  //       'quantity': slot['quantity'],
+  //     };
+  //   }).toList();
+
+  //   // Handle submission logic here
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -178,7 +201,7 @@ class _EquipmentBorrowerSystemState extends State<EquipmentBorrowerSystem> {
           alignment: Alignment.topRight,
           child: IconButton(
             onPressed: addSlot,
-            icon: Icon(Icons.add, color: Colors.green, size: 30,),
+            icon: Icon(Icons.add, color: Colors.green, size: 30),
           ),
         ),
         Row(
@@ -203,13 +226,15 @@ class _EquipmentBorrowerSystemState extends State<EquipmentBorrowerSystem> {
         ),
         Container(
           height: 250,
+          decoration: BoxDecoration(border: Border.all(color: Colors.black)),
           child: ListView.builder(
+            padding: EdgeInsets.zero,
             itemCount: slots.length,
             itemBuilder: (context, index) {
               return EquipmentSlot(
-                equipmentList: equipmentList,
                 selectedEquipment: slots[index]['equipment'],
                 quantity: slots[index]['quantity'],
+                availableQuantity: slots[index]['available'], // Pass the available quantity
                 onEquipmentChanged: (equipment) {
                   updateSlot(index, equipment, slots[index]['quantity']);
                 },
@@ -223,11 +248,12 @@ class _EquipmentBorrowerSystemState extends State<EquipmentBorrowerSystem> {
             },
           ),
         ),
-        SizedBox(height: 30),
-        ElevatedButton(
-          onPressed: submit,
-          child: Text('Save'),
-        ),
+        // Optional: Add a submit button
+        // SizedBox(height: 30),
+        // ElevatedButton(
+        //   onPressed: submit,
+        //   child: Text('Save'),
+        // ),
       ],
     );
   }

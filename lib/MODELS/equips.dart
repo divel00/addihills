@@ -4,6 +4,8 @@ class Equips{
   String itemName;
   String itemDescription;
   int itemQuantity;
+  int available;
+  int in_use;
   List<dynamic> itemRequirements;
   Timestamp createdOn;
   Timestamp lastUpdatedOn;
@@ -14,6 +16,8 @@ class Equips{
     required this.itemName,
     required this.itemDescription,
     required this.itemQuantity,
+    required this.available,
+    required this.in_use,
     required this.itemRequirements,
     required this.createdOn,
     required this.lastUpdatedOn,
@@ -26,6 +30,8 @@ class Equips{
     itemName: json['itemName']! as String,
     itemDescription: json['itemDescription']! as String,
     itemQuantity: json['itemQuantity']! as int,
+    available: json['available']! as int,
+    in_use: json['in_use']! as int,
     createdOn: json['createdOn']! as Timestamp,
     lastUpdatedOn: json['lastUpdatedOn']! as Timestamp,
     itemRequirements: json['itemRequirements']! as List<dynamic>,
@@ -37,6 +43,8 @@ class Equips{
     String? itemName,
     String? itemDescription,
     int? itemQuantity,
+    int? available,
+    int? in_use,
     List<dynamic>? itemRequirements,
     Timestamp? createdOn,
     Timestamp? lastUpdatedOn,
@@ -48,6 +56,8 @@ class Equips{
       itemName: itemName ?? this.itemName,
       itemDescription: itemDescription ?? this.itemDescription, 
       itemQuantity: itemQuantity ?? this.itemQuantity,
+      available: available ?? this.available,
+      in_use: in_use ?? this.in_use,
       createdOn: createdOn ?? this.createdOn, 
       lastUpdatedOn: lastUpdatedOn ?? this.lastUpdatedOn,
       itemRequirements: itemRequirements ?? this.itemRequirements,
@@ -61,6 +71,8 @@ class Equips{
       'itemName': itemName,
       'itemDescription': itemDescription,
       'itemQuantity': itemQuantity,
+      'available': available,
+      'in_use': in_use,
       'createdOn': createdOn,
       'lastUpdatedOn': lastUpdatedOn,
       'itemRequirements': itemRequirements,

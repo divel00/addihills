@@ -87,28 +87,3 @@ class AuthService{
   }
 
 }
-
-
-
-  // final FirebaseAuth _auth;
-  // AuthService(this._auth);
-  
-  // Future<void> signUp({
-  //   required String lastName,
-  //   required String firstName,
-  //   required String email,
-  //   required String phoneNumber,
-  //   required String address,
-  //   required String birthday,
-  //   required String password,
-  //   required BuildContext context,
-  // }) async {  
-  //   try{
-  //     await _auth.createUserWithEmailAndPassword(
-  //       email: email, 
-  //       password: password);
-  //   } on FirebaseAuthException catch (e){
-  //     showSnackBar(context, e.message!);
-  //     debugPrint(e.message!);
-  //   }
-  // }

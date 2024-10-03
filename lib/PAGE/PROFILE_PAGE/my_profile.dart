@@ -1,3 +1,6 @@
+import 'package:addhills_app/PAGE/PROFILE_PAGE/edit_profile.dart';
+import 'package:addhills_app/SERVICES/db_service.dart';
+import 'package:addhills_app/utils/methods.dart';
 import 'package:addhills_app/utils/show_snackbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,9 +23,25 @@ class ProfileIcon extends StatelessWidget {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
 
+    final DbService _dbService = DbService();
+
     return Scaffold(
-      body: Builder(
-        builder: (context) {
+      body: FutureBuilder(
+        future: _dbService.getUsersInfo(getCurrentUserEmail() ?? 'No user is logged in.'),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return Center(child: Text("Error: ${snapshot.error}"));
+          }
+
+          if (!snapshot.hasData || !snapshot.data!.exists) {
+            return Center(child: Text("User not found."));
+          }
+
+          final user = snapshot.data!.data()!; // Get the UsersInfo object
           return Container(
             color: Colors.black,
             child: Stack(
@@ -33,7 +52,7 @@ class ProfileIcon extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: Colors.black,
                       ),
-                      height: height * 0.30,
+                      height: height * 0.25,
                       width: width,
                       alignment: Alignment.topCenter,
                       child: Padding(
@@ -61,20 +80,20 @@ class ProfileIcon extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            Container(
-                              alignment: Alignment.topCenter,
-                              padding: EdgeInsets.only(
-                                top: 20,
-                              ),
-                              child: Text(
-                                'My Profile',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  letterSpacing: .90,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
+                            // Container(
+                            //   alignment: Alignment.topCenter,
+                            //   padding: EdgeInsets.only(
+                            //     top: 20,
+                            //   ),
+                            //   child: Text(
+                            //     'My Profile',
+                            //     style: TextStyle(
+                            //       fontSize: 20,
+                            //       letterSpacing: .90,
+                            //       color: Colors.white,
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),
@@ -88,7 +107,7 @@ class ProfileIcon extends StatelessWidget {
                           topRight: Radius.circular(50),
                         )
                       ),
-                      height: height - (height * 0.30),
+                      height: height - (height * 0.25),
                       width: width,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -98,9 +117,13 @@ class ProfileIcon extends StatelessWidget {
                               top: 100,
                             ),
                           ),
+                          Text(
+                            '${user.lastName}, ${user.firstName}',
+                            style: TextStyle(fontSize: 25,fontWeight: FontWeight.w600, color: Colors.black, letterSpacing: 1.5)
+                          ),
                           Divider(
-                            indent: 50,
-                            endIndent: 50,
+                            indent: 20,
+                            endIndent: 20,
                             color: Colors.black54
                           ),
                           Container(
@@ -118,7 +141,7 @@ class ProfileIcon extends StatelessWidget {
                 Container(
                   alignment: Alignment.topCenter,
                   padding: EdgeInsets.only(
-                    top: height * .20,
+                    top: height * .15,
                   ),
                   child: CircleAvatar(
                     radius: width * .2,
@@ -155,15 +178,16 @@ class ProfileList extends StatelessWidget {
           padding: EdgeInsets.zero,
           shrinkWrap: true,
           children: [
-            ListTile(
-              leading: const Icon(
-                Icons.edit,
-                color: Colors.black),
-              title: const Text('Edit Profile', style: ProfileIcon.genTextStyle,),
-              onTap: () {
-                
-              },
-            ),
+            // ListTile(
+            //   leading: const Icon(
+            //     Icons.edit,
+            //     color: Colors.black),
+            //   title: const Text('Edit Profile', style: ProfileIcon.genTextStyle,),
+            //   onTap: () {
+            //     Navigator.push(
+            //       context, MaterialPageRoute(builder: (BuildContext context) => EditProfile()));
+            //   },
+            // ),
             ListTile(
               leading: const Icon(
                 Icons.key,

@@ -2,7 +2,9 @@ import 'package:addhills_app/PAGE/OTHER_SERVICES/EQUIPMENTS_PAGE/equipments_page
 import 'package:addhills_app/PAGE/OTHER_SERVICES/VENUE_PAGE/item_Map.dart';
 import 'package:addhills_app/PAGE/OTHER_SERVICES/VENUE_PAGE/venue_request.dart';
 import 'package:addhills_app/PAGE/OTHER_SERVICES/VENUE_PAGE/venue_reservation_page.dart';
+import 'package:addhills_app/PAGE/PROFILE_PAGE/edit_profile.dart';
 import 'package:addhills_app/SERVICES/auth_service.dart';
+import 'package:addhills_app/utils/calendar_datepicker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -30,15 +32,6 @@ FirebaseFirestore.instance.settings = const Settings(
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return MaterialApp(
-  //       debugShowCheckedModeBanner: false,
-  //       title: 'Flutter Demo',
-  //       home: HomePage(),
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {

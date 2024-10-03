@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dart:math';
@@ -125,3 +126,18 @@ String convertTimestampToString(Timestamp timestamp) {
 
   return formattedDate;
 }
+
+//date format similar to the one above
+String formatDate(DateTime date) {
+    return DateFormat('yyyy-MM-dd').format(date);
+  }
+
+
+
+//get email of logged in user
+String? getCurrentUserEmail() {
+  User? user = FirebaseAuth.instance.currentUser;
+  return user?.email; // Returns the email if the user is logged in, otherwise null
+}
+
+

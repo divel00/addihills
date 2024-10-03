@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class EquipsRequestModel {
-  String selected_time;
+  String start_time;
+  String end_time;
   String requester_name;
   String address;
   String birthday;
@@ -15,7 +16,8 @@ class EquipsRequestModel {
   List<String> equipments; 
   
   EquipsRequestModel({
-    required this.selected_time,
+    required this.start_time,
+    required this.end_time,
     required this.requester_name,
     required this.address,
     required this.birthday,
@@ -31,7 +33,8 @@ class EquipsRequestModel {
 
   EquipsRequestModel.fromJson(Map<String, Object?> json) :
   this(
-    selected_time: json['selected_time']! as String,
+    start_time: json['start_time']! as String,
+    end_time: json['end_time']! as String,
     requester_name: json['requester_name']! as String,
     address: json['address']! as String,
     birthday: json['birthday']! as String,
@@ -46,7 +49,8 @@ class EquipsRequestModel {
   );
 
   EquipsRequestModel copyWith({
-    String? selected_time,
+    String? start_time,
+    String? end_time,
     String? requester_name,
     String? address,
     String? birthday,
@@ -60,7 +64,8 @@ class EquipsRequestModel {
     List<String>? equipments,
   }) {
     return EquipsRequestModel(
-      selected_time: selected_time ?? this.selected_time,
+      start_time: start_time ?? this.start_time,
+      end_time: end_time ?? this.end_time,
       requester_name: requester_name ?? this.requester_name,
       address: address ?? this.address, 
       birthday: birthday ?? this.birthday, 
@@ -77,7 +82,8 @@ class EquipsRequestModel {
 
   Map<String, Object?> toJson(){
     return {
-      'selected_time': selected_time,
+      'start_time': start_time,
+      'end_time': end_time,
       'requester_name': requester_name,
       'address': address,
       'birthday': birthday,

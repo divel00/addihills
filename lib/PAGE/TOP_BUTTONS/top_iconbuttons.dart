@@ -4,7 +4,7 @@ import 'package:addhills_app/PAGE/OTHER_SERVICES/burial_space_registration_page.
 import 'package:addhills_app/PAGE/OTHER_SERVICES/VENUE_PAGE/venue_reservation_page.dart';
 import 'package:addhills_app/PAGE/OTHER_SERVICES/EQUIPMENTS_PAGE/equipments_page.dart';
 import 'package:addhills_app/PAGE/home.dart';
-import 'package:addhills_app/PAGE/my_profile.dart';
+import 'package:addhills_app/PAGE/PROFILE_PAGE/my_profile.dart';
 import 'package:addhills_app/PAGE/request_page.dart';
 
 class MenuNotifProfile extends StatelessWidget {
