@@ -1,5 +1,6 @@
 import 'package:addhills_app/MODELS/announcements.dart';
 import 'package:addhills_app/SERVICES/db_service.dart';
+import 'package:addhills_app/utils/announcement_page.dart';
 import 'package:addhills_app/utils/methods.dart';
 import 'package:flutter/material.dart';
 import 'package:addhills_app/PAGE/TOP_BUTTONS/top_iconbuttons.dart';
@@ -67,9 +68,15 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     SizedBox(height: 10,),
+                    Divider(
+                      indent: 40,
+                      endIndent: 40,
+                      color: Colors.white,
+                      thickness: 2,
+                    ),
                     Container(
-                      width: MediaQuery.of(context).size.width * .8,
-                      height: MediaQuery.of(context).size.height * .5,
+                      //width: MediaQuery.of(context).size.width * .8,
+                      height: MediaQuery.of(context).size.height * .4,
                       // decoration: BoxDecoration(
                       //   color: Colors.grey[900],
                       // ),
@@ -105,55 +112,110 @@ class _HomePageState extends State<HomePage> {
 }
 
 class Announcement extends StatelessWidget {
-
   final DbService _dbService = DbService();
+  static var height,width;
 
   @override
   Widget build(BuildContext context) {
+    height = MediaQuery.of(context).size.height;
+    width = MediaQuery.of(context).size.width;
+
     return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(color: Colors.white70, width: 1),
-        ),
-      ),
+      // decoration: BoxDecoration(
+      //   border: Border(
+      //     top: BorderSide(color: Colors.white70, width: 1),
+      //   ),
+      // ),
       child: StreamBuilder(
         stream: _dbService.getAnnouncements(),
         builder: (context, snapshot) {
-          List docs = snapshot.data?.docs?? [];
-          return ListView.builder(
-            padding: EdgeInsets.zero,
-            itemCount: docs.length,
-            itemBuilder: (context, index) {
-              Announcements docu = docs[index].data();
-              return ListTile(
-                leading: Icon(Icons.notifications_rounded, color: Colors.white60,),
-                title: Container(
-                  //padding: EdgeInsets.only(top: 50),
-                  //alignment: Alignment.topCenter,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text( docu.title, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.white), maxLines: 2,overflow: TextOverflow.ellipsis,),
-                      Text( '         ${convertTimestampToString(docu.published_date)}', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w200, color: Colors.white)),
-                      //Text('${docu.content}', style: TextStyle(fontSize: 13, color: Colors.white), maxLines: 2,overflow: TextOverflow.ellipsis, ),
-                      //Text('see more...', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white)),
-                      // Divider(
-                      //   color: Colors.white70,
-                      // ),
-                    ],
+          List docs = snapshot.data?.docs ?? [];
+          return Container(
+            height: 150, // Set height for the horizontal list
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.zero,
+              itemCount: docs.length,
+              itemBuilder: (context, index) {
+                Announcements docu = docs[index].data();
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context, MaterialPageRoute(builder: (BuildContext context) => AnnouncementPage(
+                        imageUrl: docu.imageUrl, 
+                        title: docu.title, 
+                        content: docu.content, 
+                        published_date: convertTimestampToString(docu.published_date))));
+                  },
+                  child: Container(
+                    margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+                    decoration: BoxDecoration(
+                      color: Colors.blueGrey[400], // Adjust the color as needed
+                      borderRadius: BorderRadius.circular(16.0),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 6.0,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    width: width * .9,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: height * .3, 
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10.0),
+                            child: Image.network(
+                              docu.imageUrl,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 8.0),
+                        Container(
+                          alignment: Alignment.center,
+                          height: (height * .3) * .15, 
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: Text(
+                            docu.title,
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.black,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.bottomRight,
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text(
+                            '${convertTimestampToString(docu.published_date)}',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                onTap: () {
-                  _showDialog(context, docu.title, docu.content);
-                },
-              );
-            },
+                );
+              },
+            ),
           );
-        }
+        },
       ),
     );
   }
 }
+
 
 Future<dynamic> _showDialog(BuildContext context, String title, String content) {
     return showDialog(

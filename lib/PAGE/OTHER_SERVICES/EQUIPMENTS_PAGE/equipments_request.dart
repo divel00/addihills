@@ -177,17 +177,7 @@ class _EquipsFormState extends State<EquipsForm> {
               // headerForTfield(text: 'Address',),
               // buildAddress(), 
               headerForTfield(text: 'Purpose',),
-              buildPurpose(),    
-              SizedBox(height: 30),   
-                // Text(
-                //   'Additional Requests',
-                //   style: TextStyle(
-                //     color: Colors.black54,
-                //   ),
-                // ),
-                Divider(
-                  color: Colors.black54
-                ),
+              buildPurpose(),  
               headerForTfield(text: 'Reservation Date',),
               buildSetDate(),
               Row(
@@ -216,8 +206,10 @@ class _EquipsFormState extends State<EquipsForm> {
             ],
           ),
         ),
+        SizedBox(height: 30),
+        Divider(color: Colors.black54),
         headerForTfield(text: 'Equipments'),
-        EquipmentBorrowerSystem(
+        EquipmentInput(
           onSelectionChanged: (selectedItems) {
             setState(() {
               widget.additionalRequirementsController.text = selectedItems;
@@ -416,15 +408,18 @@ class _EquipsFormState extends State<EquipsForm> {
     }
   }
 
-  Future<void> _selectDate(BuildContext context, TextEditingController controller) async{
+  Future<void> _selectDate(BuildContext context, TextEditingController controller) async {
+    DateTime now = DateTime.now();
+    DateTime threeDaysFromNow = DateTime(now.year, now.month, now.day + 3);
+
     DateTime? _picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(), 
-      firstDate: DateTime(1900), 
+      initialDate: threeDaysFromNow,
+      firstDate: threeDaysFromNow,
       lastDate: DateTime(2100),
     );
 
-    if (_picked != null){
+    if (_picked != null) {
       setState(() {
         controller.text = _picked.toString().split(' ')[0];
       });

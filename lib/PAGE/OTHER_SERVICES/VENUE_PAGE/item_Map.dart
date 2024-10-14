@@ -93,15 +93,15 @@ class _EquipmentSlotState extends State<EquipmentSlot> {
 
 
 // Main Screen
-class EquipmentBorrowerSystem extends StatefulWidget {
+class EquipmentInput extends StatefulWidget {
   final Function(String) onSelectionChanged; // Callback to pass data back
-  EquipmentBorrowerSystem({required this.onSelectionChanged});
+  EquipmentInput({required this.onSelectionChanged});
 
   @override
-  _EquipmentBorrowerSystemState createState() => _EquipmentBorrowerSystemState();
+  _EquipmentInputState createState() => _EquipmentInputState();
 }
 
-class _EquipmentBorrowerSystemState extends State<EquipmentBorrowerSystem> {
+class _EquipmentInputState extends State<EquipmentInput> {
   final DbService _dbService = DbService();
   List<Equipment> equipmentList = [];
   List<Map<String, dynamic>> slots = [];
@@ -182,17 +182,6 @@ class _EquipmentBorrowerSystemState extends State<EquipmentBorrowerSystem> {
     widget.onSelectionChanged(selectedEquipmentsString); // Pass the updated string back
   }
 
-  // void submit() {
-  //   List<Map<String, dynamic>> submittedData = slots.map((slot) {
-  //     return {
-  //       'equipment': (slot['equipment'] as Equipment?)?.name ?? 'None',
-  //       'quantity': slot['quantity'],
-  //     };
-  //   }).toList();
-
-  //   // Handle submission logic here
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -248,12 +237,6 @@ class _EquipmentBorrowerSystemState extends State<EquipmentBorrowerSystem> {
             },
           ),
         ),
-        // Optional: Add a submit button
-        // SizedBox(height: 30),
-        // ElevatedButton(
-        //   onPressed: submit,
-        //   child: Text('Save'),
-        // ),
       ],
     );
   }

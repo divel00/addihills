@@ -7,6 +7,7 @@ import 'package:addhills_app/MODELS/equips.dart';
 import 'package:addhills_app/MODELS/users.dart';
 import 'package:addhills_app/MODELS/venues.dart';
 import 'package:addhills_app/PAGE/OTHER_SERVICES/VENUE_PAGE/item_Map.dart';
+import 'package:addhills_app/utils/methods.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -93,7 +94,7 @@ class DbService {
     return _venueRef.snapshots();
   }
 
-   Stream<QuerySnapshot<VenueRequestModel>> getVenueReqs() {
+  Stream<QuerySnapshot<VenueRequestModel>> getVenueReqs() {
     return _venueReqRef.where('request_status', isEqualTo: 'Approved').snapshots();
   }
 
@@ -111,6 +112,58 @@ class DbService {
       rethrow; // Optionally rethrow the error
     }
   }
+
+
+  // Method to get all user requests
+  Future<List<Map<String, dynamic>>> getAllUserRequests(String userEmail) async {
+    List<Map<String, dynamic>> allRequests = [];
+
+    // Fetch document requests
+    try {
+      QuerySnapshot<DocuRequest> docRequestsSnapshot = await _docsReqRef.where('user_email', isEqualTo: userEmail).get();
+      for (var doc in docRequestsSnapshot.docs) {
+        allRequests.add({
+          'type': 'Document Request',
+          'data': doc.data(),
+        });
+      }
+    } catch (e) {
+      print("Error fetching document requests: $e");
+    }
+
+    // Fetch venue requests
+    try {
+      QuerySnapshot<VenueRequestModel> venueRequestsSnapshot = await _venueReqRef.where('user_email', isEqualTo: userEmail).get();
+      for (var venueDoc in venueRequestsSnapshot.docs) {
+        allRequests.add({
+          'type': 'Venue Request',
+          'data': venueDoc.data(),
+        });
+      }
+    } catch (e) {
+      print("Error fetching venue requests: $e");
+    }
+
+    // Fetch equipment requests
+    try {
+      QuerySnapshot<EquipsRequestModel> equipRequestsSnapshot = await _equipReqRef.where('user_email', isEqualTo: userEmail).get();
+      for (var equipDoc in equipRequestsSnapshot.docs) {
+        allRequests.add({
+          'type': 'Equipment Request',
+          'data': equipDoc.data(),
+        });
+      }
+    } catch (e) {
+      print("Error fetching equipment requests: $e");
+    }
+
+    return allRequests;
+  }
+
+
+
+
+
 
   // Fetch equipment
   Stream<List<Equipment>> getEquipments() {

@@ -16,7 +16,7 @@ import 'package:addhills_app/PAGE/DOCUMENT_REQUEST/document_request.dart';
 import 'package:addhills_app/PAGE/DOCUMENT_REQUEST/dr_register.dart';
 import 'package:addhills_app/PAGE/home.dart';
 import 'package:addhills_app/PAGE/login_page.dart';
-import 'package:addhills_app/PAGE/request_page.dart';
+import 'package:addhills_app/PAGE/PROFILE_PAGE/request_page.dart';
 import 'package:addhills_app/PAGE/signup_page.dart';
 
 void main() async{

@@ -5,6 +5,7 @@ class Announcements{
   String content;
   String last_modified_by;
   String published_by;
+  String imageUrl;
   Timestamp published_date;
   Timestamp last_modified_date;
   
@@ -14,6 +15,7 @@ class Announcements{
     required this.content,
     required this.last_modified_by,
     required this.published_by,
+    required this.imageUrl,
     required this.published_date,
     required this.last_modified_date,
   });
@@ -24,6 +26,7 @@ class Announcements{
     content: json['content']! as String,
     last_modified_by: json['last_modified_by']! as String,
     published_by: json['published_by']! as String,
+    imageUrl: json['imageUrl']! as String,
     published_date: json['published_date']! as Timestamp,
     last_modified_date: json['last_modified_date']! as Timestamp,
   );
@@ -33,6 +36,7 @@ class Announcements{
     String? content,
     String? last_modified_by,
     String? published_by,
+    String? imageUrl,
     Timestamp? published_date,
     Timestamp? last_modified_date,
 
@@ -42,6 +46,7 @@ class Announcements{
       content: content ?? this.content,
       last_modified_by: last_modified_by ?? this.last_modified_by,
       published_by: published_by ?? this.published_by,
+      imageUrl: imageUrl ?? this.imageUrl,
       published_date: published_date ?? this.published_date,
       last_modified_date: last_modified_date ?? this.last_modified_date,
     );
@@ -53,6 +58,7 @@ class Announcements{
       'content': content,
       'last_modified_by': last_modified_by,
       'published_by': published_by,
+      'imageUrl': imageUrl,
       'published_date': published_date,
       'last_modified_date': last_modified_date,
     };

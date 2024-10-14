@@ -4,7 +4,7 @@ import 'package:addhills_app/utils/methods.dart';
 import 'package:addhills_app/utils/show_snackbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:addhills_app/PAGE/request_page.dart';
+import 'package:addhills_app/PAGE/PROFILE_PAGE/request_page.dart';
 import 'package:provider/provider.dart';
 
 
@@ -32,15 +32,12 @@ class ProfileIcon extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           }
-
           if (snapshot.hasError) {
             return Center(child: Text("Error: ${snapshot.error}"));
           }
-
           if (!snapshot.hasData || !snapshot.data!.exists) {
             return Center(child: Text("User not found."));
           }
-
           final user = snapshot.data!.data()!; // Get the UsersInfo object
           return Container(
             color: Colors.black,
@@ -190,6 +187,16 @@ class ProfileList extends StatelessWidget {
             // ),
             ListTile(
               leading: const Icon(
+                Icons.notifications,
+                color: Colors.black),
+              title: const Text('View Requests', style: ProfileIcon.genTextStyle),
+              onTap: () {
+                Navigator.push(
+                context, MaterialPageRoute(builder: (BuildContext context) => RequestPage()));
+              },
+            ),
+            ListTile(
+              leading: const Icon(
                 Icons.key,
                 color: Colors.black),
               title: const Text('Change Password', style: ProfileIcon.genTextStyle),
@@ -197,16 +204,6 @@ class ProfileList extends StatelessWidget {
                 
               },
             ),
-            // ListTile(
-            //   leading: const Icon(
-            //     Icons.notifications,
-            //     color: Colors.black),
-            //   title: const Text('Requests', style: ProfileIcon.genTextStyle),
-            //   onTap: () {
-            //     Navigator.push(
-            //     context, MaterialPageRoute(builder: (BuildContext context) => RequestPage()));
-            //   },
-            // ),
             ListTile(
               leading: const Icon(
                 Icons.logout,

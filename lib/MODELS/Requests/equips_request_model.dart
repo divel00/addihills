@@ -45,7 +45,7 @@ class EquipsRequestModel {
     user_age: json['user_age']! as String,
     purpose: json['purpose']! as String,
     contact_number: json['contact_number']! as String,
-    equipments: json['equipments'] as List<String>,
+    equipments: (json['equipments'] as List<dynamic>? ?? []).map((e) => e as String).toList(),
   );
 
   EquipsRequestModel copyWith({

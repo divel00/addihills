@@ -1,4 +1,5 @@
 import 'package:addhills_app/MODELS/Requests/venue_request_model.dart';
+import 'package:addhills_app/PAGE/OTHER_SERVICES/VENUE_PAGE/item_Map.dart';
 import 'package:addhills_app/PAGE/OTHER_SERVICES/VENUE_PAGE/venue_reservation_page.dart';
 import 'package:addhills_app/SERVICES/db_service.dart';
 import 'package:addhills_app/utils/calendar_datepicker.dart';
@@ -83,7 +84,7 @@ class VenueRequest extends StatelessWidget {
                             ),
                             Container(
                               height: (height * .64), width: width,
-                              padding: EdgeInsets.only(left: 50, right: 50),
+                              padding: EdgeInsets.only(left: 30, right: 30),
                               child: ListView(
                                 padding: EdgeInsets.zero,
                                 children: [
@@ -215,6 +216,13 @@ class _VenueFormState extends State<VenueForm> {
           color: Colors.black54
         ),
         headerForTfield(text: 'Equipments'),
+        EquipmentInput(
+          onSelectionChanged: (selectedItems) {
+            setState(() {
+              widget.additionalRequirementsController.text = selectedItems;
+            });
+          },
+        ),
         //EquipmentBox(equipmentController: widget.additionalRequirementsController)
       ],
     );
